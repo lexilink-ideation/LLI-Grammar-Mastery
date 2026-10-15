@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LLI Grammar Mastery</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* Layout: one column. A CEFR ladder of six level rows, A1 at the top, each with its units and a link to its quick checks. */
+:root {
+  --bg: #F4F6F9; --surface: #FFFFFF; --surface-2: #EEF2F6; --ink: #1B2734; --muted: #5B6878; --rule: #D5DCE4;
+  --navy: #1F3A5F; --navy-ink: #FFFFFF; --gold: #8A6A2E; --gold-soft: #F3EBDD; --good: #23704F; --good-soft: #E3F2EA; --focus: #2F6DB5;
+  --f-display: "Lexend", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E1520; --surface: #162130; --surface-2: #1D2A3B; --ink: #E5EBF2; --muted: #9AA8B8; --rule: #2B3A4E;
+    --navy: #9DBDE6; --navy-ink: #0E1520; --gold: #D5B16E; --gold-soft: #2D2717; --good: #6FCF9F; --good-soft: #15302A; --focus: #8CB8F0; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E1520; --surface: #162130; --surface-2: #1D2A3B; --ink: #E5EBF2; --muted: #9AA8B8; --rule: #2B3A4E;
+  --navy: #9DBDE6; --navy-ink: #0E1520; --gold: #D5B16E; --gold-soft: #2D2717; --good: #6FCF9F; --good-soft: #15302A; --focus: #8CB8F0; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 17px; line-height: 1.5; }
+h1, h2, h3 { font-family: var(--f-display); margin: 0; text-wrap: balance; }
+p { margin: 0; }
+a:focus-visible, summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.shell { max-width: 980px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+.topbar { background: var(--surface); border-bottom: 1px solid var(--rule); }
+.topbar .shell { display: flex; align-items: baseline; gap: 10px; padding-block: 12px; }
+.topbar b { font-family: var(--f-display); font-weight: 700; color: var(--navy); font-size: 22px; letter-spacing: .08em; }
+.topbar i { width: 1px; height: 18px; background: var(--rule); align-self: center; }
+.topbar span { font-size: 11px; letter-spacing: .22em; color: var(--muted); text-transform: uppercase; }
+
+.hero { padding-block: 40px 26px; display: grid; gap: 12px; }
+.eyebrow { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); font-weight: 700; }
+.hero h1 { font-size: clamp(32px, 5vw, 48px); color: var(--navy); font-weight: 600; letter-spacing: -.01em; }
+.hero p { color: var(--muted); max-width: 64ch; font-size: 18px; }
+
+.stages { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border: 1px solid var(--rule); border-radius: 12px; overflow: hidden; background: var(--surface); margin-bottom: 14px; }
+.stages div { padding: 14px 16px; border-right: 1px solid var(--rule); display: grid; gap: 2px; }
+.stages div:last-child { border-right: 0; background: var(--gold-soft); }
+.stages b { font-family: var(--f-display); font-weight: 600; color: var(--navy); }
+.stages small { color: var(--muted); font-size: 14px; }
+.stages .n { font-size: 12px; font-weight: 700; color: var(--gold); letter-spacing: .12em; }
+.disclaimer { font-size: 15px; color: var(--muted); border-left: 3px solid var(--gold); padding-left: 12px; max-width: 75ch; margin-bottom: 34px; }
+
+/* CEFR band headings */
+.band { display: flex; align-items: baseline; gap: 12px; margin: 26px 0 10px; }
+.band h2 { font-size: 14px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); font-weight: 700; font-family: var(--f-body); }
+.band span { color: var(--muted); font-size: 15px; }
+.band::after { content: ""; flex: 1; height: 1px; background: var(--rule); align-self: center; }
+
+.levels { display: grid; gap: 12px; }
+.lv { background: var(--surface); border: 1px solid var(--rule); border-radius: 14px; display: grid; grid-template-columns: 96px minmax(0, 1fr); overflow: hidden; }
+.lv.ready { border-color: var(--navy); }
+.code { background: var(--surface-2); display: grid; place-content: center; text-align: center; padding: 16px 8px; gap: 2px; }
+.lv.ready .code { background: var(--navy); }
+.code b { font-family: var(--f-display); font-weight: 700; font-size: 36px; line-height: 1; color: var(--navy); }
+.lv.ready .code b { color: var(--navy-ink); }
+.code small { font-size: 12px; color: var(--muted); }
+.lv.ready .code small { color: var(--navy-ink); opacity: .8; }
+.lv .body { padding: 16px 20px; display: grid; gap: 10px; min-width: 0; }
+.lv .row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+.lv h3 { font-size: 21px; font-weight: 600; color: var(--ink); }
+.status { font-size: 13px; font-weight: 700; padding: 2px 10px; border-radius: 99px; white-space: nowrap; }
+.status.on { background: var(--good-soft); color: var(--good); }
+.status.off { background: var(--surface-2); color: var(--muted); }
+.row .grow { flex: 1; }
+.open { background: var(--navy); color: var(--navy-ink); text-decoration: none; font-weight: 700; border-radius: 10px; padding: 9px 18px; white-space: nowrap; }
+.open:hover { filter: brightness(1.08); }
+.meta { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 15px; color: var(--muted); }
+.dl { color: var(--navy); font-weight: 700; }
+.meta b { color: var(--ink); font-variant-numeric: tabular-nums; }
+details summary { cursor: pointer; font-size: 15px; font-weight: 700; color: var(--navy); list-style: none; }
+details summary::-webkit-details-marker { display: none; }
+details summary::before { content: "+ "; }
+details[open] summary::before { content: "– "; }
+.units { list-style: none; margin: 8px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 24px; }
+.units li { display: grid; grid-template-columns: 58px minmax(0, 1fr) auto; gap: 8px; padding: 7px 0; border-top: 1px solid var(--rule); font-size: 15px; }
+.units .u { font-size: 12px; font-weight: 700; letter-spacing: .1em; color: var(--gold); padding-top: 2px; }
+.units .s { color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+footer { padding-block: 26px 44px; margin-top: 30px; border-top: 1px solid var(--rule); color: var(--muted); font-size: 13px; display: flex; flex-wrap: wrap; gap: 6px 18px; }
+
+@media (max-width: 700px) {
+  .stages { grid-template-columns: 1fr; }
+  .stages div { border-right: 0; border-bottom: 1px solid var(--rule); }
+  .lv { grid-template-columns: 70px minmax(0, 1fr); }
+  .code b { font-size: 28px; }
+  .units { grid-template-columns: 1fr; }
+  .topbar span, .topbar i { display: none; }
+}
+</style>
+<style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+</head>
+<body>
+<header class="topbar"><div class="shell"><b>LLI</b><i></i><span>Lexilink Ideation</span></div></header>
+
+<main>
+  <section class="shell hero">
+    <div class="eyebrow">Grammar Mastery Programme · CEFR A1–C2</div>
+    <h1>LLI Grammar Mastery</h1>
+    <p>Six levels of grammar, from first sentences to full control. Each level has a Grammar Mastery Checklist, with one grammar point per teaching session. Interactive Quick Checks let teachers test every point in class and decide where each student is.</p>
+  </section>
+
+  <section class="shell" aria-label="Progress stages">
+    <div class="stages">
+      <div><span class="n">STAGE 1</span><b>Introduced</b><small>Taught and understood with support.</small></div>
+      <div><span class="n">STAGE 2</span><b>Practising</b><small>Used in guided tasks; errors still happen.</small></div>
+      <div><span class="n">STAGE 3</span><b>Mastered</b><small>Used independently in real speaking or writing, about 80%+ accurate.</small></div>
+    </div>
+    <p class="disclaimer">Completing a checklist shows grammatical control broadly aligned with that CEFR level. It does not by itself certify overall CEFR proficiency.</p>
+  </section>
+
+  <section class="shell" id="levels"></section>
+
+  <footer class="shell"><span>LLI · Lexilink Ideation</span><span>Grammar Mastery Programme</span><span id="totals"></span></footer>
+</main>
+
+<script>
+const LEVELS = [{"code":"A1","name":"Breakthrough","total":30,"units":[{"name":"Being and having","count":9},{"name":"Present simple","count":6},{"name":"Things, places and quantity","count":6},{"name":"Ability, now and the past","count":8},{"name":"Linking ideas","count":1}],"url":"a1.html","questions":254,"checklist":"LLI_Grammar_Mastery_Checklist_A1.docx","newTab":false},{"code":"A2","name":"Waystage","total":35,"units":[{"name":"Telling stories about the past","count":5},{"name":"Talking about the future","count":5},{"name":"Present perfect","count":4},{"name":"Comparing and describing","count":7},{"name":"Modal verbs","count":5},{"name":"Verb patterns and sentences","count":9}],"url":"a2.html","questions":285,"checklist":"LLI_Grammar_Mastery_Checklist_A2.docx","newTab":false},{"code":"B1","name":"Threshold","total":38,"units":[{"name":"Tense and time","count":6},{"name":"Future forms","count":4},{"name":"Modality","count":5},{"name":"Conditionals and wishes","count":5},{"name":"Passive and reported speech","count":6},{"name":"Building complex sentences","count":6},{"name":"Patterns and noun phrases","count":6}],"url":null,"questions":null,"checklist":"LLI_Grammar_Mastery_Checklist_B1.docx","newTab":false},{"code":"B2","name":"Vantage","total":38,"units":[{"name":"Advanced tense control","count":6},{"name":"Modality","count":4},{"name":"Conditionals and the hypothetical","count":5},{"name":"Passive and reporting","count":5},{"name":"Complex sentences","count":7},{"name":"Noun phrases and patterns","count":6},{"name":"Emphasis and cohesion","count":5}],"url":null,"questions":null,"checklist":"LLI_Grammar_Mastery_Checklist_B2.docx","newTab":false},{"code":"C1","name":"Effective Operational Proficiency","total":30,"units":[{"name":"Hypothesis and modality","count":5},{"name":"Emphasis and information structure","count":5},{"name":"Complex noun groups and clauses","count":5},{"name":"Verb complementation and the passive","count":5},{"name":"Cohesion and stance","count":5},{"name":"Precision and register","count":5}],"url":null,"questions":null,"checklist":"LLI_Grammar_Mastery_Checklist_C1.docx","newTab":false},{"code":"C2","name":"Mastery","total":20,"units":[{"name":"Nuance in form","count":5},{"name":"Discourse and argument","count":5},{"name":"Complex structures","count":5},{"name":"Control and style","count":5}],"url":null,"questions":null,"checklist":"LLI_Grammar_Mastery_Checklist_C2.docx","newTab":false}];
+const BANDS = [["Basic user", "A1–A2", ["A1", "A2"]], ["Independent user", "B1–B2", ["B1", "B2"]], ["Proficient user", "C1–C2", ["C1", "C2"]]];
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const byCode = Object.fromEntries(LEVELS.map(l => [l.code, l]));
+
+function levelHTML(l) {
+  const ready = !!l.url;
+  let n = 0;
+  const units = l.units.map((u, i) => { const a = n + 1; n += u.count; return `<li><span class="u">UNIT ${i + 1}</span><span>${esc(u.name)}</span><span class="s">${a === n ? a : a + "–" + n}</span></li>`; }).join("");
+  return `<article class="lv ${ready ? "ready" : ""}">
+    <div class="code"><b>${l.code}</b><small>CEFR</small></div>
+    <div class="body">
+      <div class="row">
+        <h3>${esc(l.name)}</h3>
+        <span class="status ${ready ? "on" : "off"}">${ready ? "Quick checks ready" : "Quick checks coming soon"}</span>
+        <div class="grow"></div>
+        ${ready ? `<a class="open" href="${esc(l.url)}"${l.newTab ? ' target="_blank" rel="noopener"' : ""}>Open ${l.code} Quick Checks →</a>` : ""}
+      </div>
+      <div class="meta"><span><b>${l.total}</b> grammar points</span><span><b>${l.units.length}</b> units</span>${ready ? `<span><b>${l.questions}</b> questions</span><span>Point checks · Unit reviews · Level diagnostic</span>` : ""}${l.checklist ? `<a class="dl" href="${esc(l.checklist)}" download>Download ${l.code} checklist (.docx)</a>` : (ready ? "" : `<span>Checklist available</span>`)}</div>
+      <details><summary>Units in ${l.code}</summary><ul class="units">${units}</ul></details>
+    </div>
+  </article>`;
+}
+document.getElementById("levels").innerHTML = BANDS.map(([name, range, codes]) =>
+  `<div class="band"><h2>${name}</h2><span>${range}</span></div><div class="levels">${codes.map(c => levelHTML(byCode[c])).join("")}</div>`).join("");
+const tp = LEVELS.reduce((a, l) => a + l.total, 0);
+document.getElementById("totals").textContent = `${tp} grammar points across six levels`;
+</script>
+</body>
+</html>

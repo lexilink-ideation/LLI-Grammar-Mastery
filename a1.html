@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LLI A1 Grammar Quick Checks</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<style>
+/* Layout: a single centred working column, like a teacher's clipboard. Home = units as numbered session rows; check = one large question card for projection. */
+:root {
+  --bg: #F4F6F9;
+  --surface: #FFFFFF;
+  --surface-2: #EEF2F6;
+  --ink: #1B2734;
+  --muted: #5B6878;
+  --rule: #D5DCE4;
+  --navy: #1F3A5F;
+  --navy-ink: #FFFFFF;
+  --gold: #8A6A2E;
+  --gold-soft: #F3EBDD;
+  --good: #23704F;
+  --good-soft: #E3F2EA;
+  --bad: #A8402F;
+  --bad-soft: #F8E7E3;
+  --focus: #2F6DB5;
+  --shadow: 0 1px 2px rgba(20,35,55,.06), 0 6px 20px rgba(20,35,55,.06);
+  --f-display: "Lexend", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --qscale: 1;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E1520; --surface: #162130; --surface-2: #1D2A3B; --ink: #E5EBF2; --muted: #9AA8B8; --rule: #2B3A4E;
+    --navy: #9DBDE6; --navy-ink: #0E1520; --gold: #D5B16E; --gold-soft: #2D2717;
+    --good: #6FCF9F; --good-soft: #15302A; --bad: #F0907F; --bad-soft: #3A1E1A; --focus: #8CB8F0;
+    --shadow: 0 1px 2px rgba(0,0,0,.3); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E1520; --surface: #162130; --surface-2: #1D2A3B; --ink: #E5EBF2; --muted: #9AA8B8; --rule: #2B3A4E;
+  --navy: #9DBDE6; --navy-ink: #0E1520; --gold: #D5B16E; --gold-soft: #2D2717;
+  --good: #6FCF9F; --good-soft: #15302A; --bad: #F0907F; --bad-soft: #3A1E1A; --focus: #8CB8F0;
+  --shadow: 0 1px 2px rgba(0,0,0,.3); color-scheme: dark;
+}
+:root[data-size="l"] { --qscale: 1.2; }
+:root[data-size="xl"] { --qscale: 1.45; }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 17px; line-height: 1.5; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, summary:focus-visible, a:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; }
+p { margin: 0; }
+
+.shell { max-width: 980px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* top bar */
+.topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--surface); border-bottom: 1px solid var(--rule); }
+.topbar .shell { display: flex; align-items: center; gap: 12px; padding-block: 10px; }
+.brand { display: flex; align-items: baseline; gap: 10px; min-width: 0; text-decoration: none; color: inherit; background: none; border: 0; padding: 0; }
+.brand b { font-family: var(--f-display); font-weight: 700; color: var(--navy); font-size: 22px; letter-spacing: .08em; }
+.brand span { font-size: 11px; letter-spacing: .22em; color: var(--muted); text-transform: uppercase; white-space: nowrap; }
+.brand i { width: 1px; height: 18px; background: var(--rule); align-self: center; }
+.topbar .grow { flex: 1; }
+.lvl-chip { font-family: var(--f-display); font-weight: 600; font-size: 13px; color: var(--gold); background: var(--gold-soft); padding: 3px 10px; border-radius: 99px; white-space: nowrap; }
+.tool { border: 1px solid var(--rule); background: var(--surface); border-radius: 8px; padding: 5px 10px; font-size: 14px; color: var(--muted); white-space: nowrap; }
+.tool:hover { color: var(--ink); border-color: var(--muted); }
+
+/* home */
+.hero { padding-block: 36px 22px; display: grid; gap: 10px; }
+.eyebrow { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); font-weight: 700; }
+.hero h1 { font-size: clamp(30px, 4.6vw, 44px); color: var(--navy); font-weight: 600; letter-spacing: -.01em; }
+.hero p { color: var(--muted); max-width: 62ch; font-size: 18px; }
+.stats { display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: 14px; color: var(--muted); padding-top: 4px; }
+.stats b { color: var(--ink); font-variant-numeric: tabular-nums; }
+
+.modes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding-bottom: 18px; }
+.mode { background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; padding: 16px 18px; display: grid; gap: 4px; align-content: start; }
+.mode h3 { font-size: 16px; font-weight: 600; color: var(--navy); }
+.mode p { font-size: 15px; color: var(--muted); }
+.mode.primary { background: var(--navy); border-color: var(--navy); text-align: left; }
+.mode.primary h3, .mode.primary p { color: var(--navy-ink); }
+.mode.primary p { opacity: .85; }
+.mode.primary .go { color: var(--navy-ink); }
+.go { font-weight: 700; font-size: 14px; color: var(--navy); margin-top: 6px; }
+
+.guide { background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; margin-bottom: 30px; }
+.guide summary { list-style: none; padding: 14px 18px; display: flex; gap: 10px; align-items: center; font-weight: 700; color: var(--navy); cursor: pointer; }
+.guide summary::-webkit-details-marker { display: none; }
+.guide summary::after { content: "+"; margin-left: auto; font-size: 22px; line-height: 1; color: var(--muted); font-weight: 400; }
+.guide[open] summary::after { content: "–"; }
+.guide .body { padding: 0 18px 18px; display: grid; gap: 14px; }
+.steps { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; counter-reset: s; }
+.steps li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; counter-increment: s; }
+.steps li::before { content: counter(s); font-family: var(--f-display); font-weight: 600; color: var(--gold); font-size: 15px; padding-top: 1px; }
+.stage-key { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.stage-key div { background: var(--surface-2); border-radius: 8px; padding: 10px 12px; font-size: 14px; color: var(--muted); }
+.stage-key b { display: block; color: var(--navy); font-size: 15px; }
+.note { font-size: 15px; color: var(--muted); border-left: 3px solid var(--gold); padding: 2px 0 2px 12px; }
+
+.unit { margin-bottom: 30px; }
+.unit-head { display: flex; align-items: end; gap: 12px; flex-wrap: wrap; border-bottom: 2px solid var(--navy); padding-bottom: 8px; margin-bottom: 4px; }
+.unit-head .u { font-size: 12px; letter-spacing: .16em; font-weight: 700; color: var(--gold); text-transform: uppercase; }
+.unit-head h2 { font-size: 21px; color: var(--navy); font-weight: 600; }
+.unit-head .s { font-size: 14px; color: var(--muted); }
+.unit-head .grow { flex: 1; }
+.unit-btn { border: 1px solid var(--navy); color: var(--navy); background: transparent; border-radius: 8px; padding: 5px 12px; font-size: 14px; font-weight: 600; }
+.unit-btn:hover { background: var(--navy); color: var(--navy-ink); }
+.points { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px; }
+.pt { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 12px; align-items: center; text-align: left; background: none; border: 0; border-bottom: 1px solid var(--rule); padding: 12px 4px; border-radius: 0; }
+.pt:hover { background: var(--surface); }
+.pt .n { font-family: var(--f-display); font-weight: 600; color: var(--muted); font-size: 17px; font-variant-numeric: tabular-nums; }
+.pt .t { font-weight: 700; color: var(--ink); line-height: 1.3; }
+.pt .c { display: block; font-size: 14px; color: var(--muted); line-height: 1.35; margin-top: 2px; }
+.pt .arrow { color: var(--navy); font-weight: 700; font-size: 18px; }
+
+footer { padding-block: 20px 40px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--rule); margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px 18px; }
+footer a { color: var(--navy); font-weight: 600; }
+
+/* check view */
+.check { padding-block: 18px 40px; display: grid; gap: 14px; }
+.crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+.back { background: none; border: 0; color: var(--navy); font-weight: 700; padding: 4px 0; }
+.crumb-title { font-family: var(--f-display); font-weight: 600; color: var(--navy); font-size: 18px; min-width: 0; }
+.crumb-title small { font-family: var(--f-body); font-weight: 700; color: var(--gold); letter-spacing: .12em; font-size: 12px; text-transform: uppercase; margin-right: 8px; }
+.crumbs .grow { flex: 1; }
+.progress { display: flex; gap: 4px; }
+.progress span { flex: 1; height: 6px; border-radius: 3px; background: var(--rule); }
+.progress span.ok { background: var(--good); }
+.progress span.no { background: var(--bad); }
+.progress span.cur { background: var(--navy); }
+.progress span.sp { flex: 0 0 34px; }
+
+.notes-btn { border: 1px solid var(--rule); background: var(--surface); border-radius: 8px; padding: 5px 12px; font-size: 14px; color: var(--muted); font-weight: 600; }
+.notes-btn[aria-expanded="true"] { background: var(--gold-soft); color: var(--gold); border-color: transparent; }
+.notes { background: var(--gold-soft); border-radius: 12px; padding: 16px 18px; display: grid; gap: 10px; grid-template-columns: 120px minmax(0, 1fr); font-size: 16px; }
+.notes dt { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); padding-top: 3px; }
+.notes dd { margin: 0; }
+
+.card { background: var(--surface); border: 1px solid var(--rule); border-radius: 16px; box-shadow: var(--shadow); padding: clamp(20px, 4vw, 40px); display: grid; gap: 22px; }
+.qhead { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: baseline; }
+.qtype { font-size: 13px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; color: var(--gold); }
+.qnum { font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.qtext { font-family: var(--f-display); font-weight: 500; font-size: calc(clamp(24px, 1rem + 2.2vw, 38px) * var(--qscale)); line-height: 1.35; color: var(--ink); overflow-wrap: anywhere; }
+.gap { display: inline-block; min-width: 3.2em; border-bottom: 3px solid var(--navy); text-align: center; padding: 0 .2em; line-height: 1.15; }
+.gap.ok { color: var(--good); border-color: var(--good); }
+.gap.no { color: var(--bad); border-color: var(--bad); text-decoration: line-through; }
+
+.opts { display: grid; gap: 10px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.opts.sent { grid-template-columns: 1fr; }
+.opt { display: flex; gap: 12px; align-items: center; text-align: left; background: var(--surface-2); border: 2px solid transparent; border-radius: 12px; padding: 14px 16px; font-family: var(--f-display); font-size: calc(clamp(18px, .9rem + 1vw, 24px) * var(--qscale)); font-weight: 500; min-width: 0; }
+.opt .k { flex: 0 0 auto; width: 1.6em; height: 1.6em; border-radius: 50%; display: grid; place-items: center; font-size: .62em; font-weight: 600; background: var(--surface); color: var(--muted); border: 1px solid var(--rule); }
+.opt .lbl { min-width: 0; overflow-wrap: anywhere; }
+.opt:hover:not(:disabled) { border-color: var(--navy); }
+.opt:disabled { cursor: default; opacity: .55; }
+.opt.right { background: var(--good-soft); border-color: var(--good); opacity: 1; }
+.opt.wrong { background: var(--bad-soft); border-color: var(--bad); opacity: 1; }
+
+.words { display: flex; flex-wrap: wrap; gap: .3em .25em; font-family: var(--f-display); font-weight: 500; font-size: calc(clamp(24px, 1rem + 2.2vw, 38px) * var(--qscale)); line-height: 1.4; }
+.word { background: none; border: 0; border-bottom: 2px dotted var(--rule); border-radius: 4px; padding: 0 .12em; font-family: inherit; font-weight: inherit; font-size: inherit; }
+.word:hover:not(:disabled) { background: var(--surface-2); border-bottom-color: var(--navy); }
+.word:disabled { cursor: default; }
+.word.bad { background: var(--good-soft); color: var(--good); border-bottom: 2px solid var(--good); }
+.word.picked { background: var(--bad-soft); color: var(--bad); border-bottom: 2px solid var(--bad); text-decoration: line-through; }
+
+.line { min-height: calc(64px * var(--qscale)); border: 2px dashed var(--rule); border-radius: 12px; padding: 10px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.line.done-ok { border-style: solid; border-color: var(--good); background: var(--good-soft); }
+.line.done-no { border-style: solid; border-color: var(--bad); background: var(--bad-soft); }
+.line .placeholder { color: var(--muted); font-size: 15px; padding-left: 4px; }
+.line .punct { font-family: var(--f-display); font-size: calc(clamp(18px, .9rem + 1vw, 24px) * var(--qscale)); color: var(--muted); }
+.bank { display: flex; flex-wrap: wrap; gap: 8px; min-height: 52px; }
+.tile { background: var(--surface); border: 2px solid var(--navy); color: var(--navy); border-radius: 10px; padding: 8px 14px; font-family: var(--f-display); font-weight: 500; font-size: calc(clamp(18px, .9rem + 1vw, 24px) * var(--qscale)); }
+.tile.used { visibility: hidden; }
+.line .tile { background: var(--navy); color: var(--navy-ink); }
+.line .tile:disabled { cursor: default; }
+.order-tools { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.btn { border: 0; border-radius: 10px; padding: 12px 22px; font-weight: 700; font-size: 16px; background: var(--navy); color: var(--navy-ink); }
+.btn:disabled { opacity: .4; cursor: default; }
+.btn.ghost { background: transparent; color: var(--navy); border: 1px solid var(--rule); }
+.btn .kbd { font-weight: 400; opacity: .7; font-size: 13px; margin-left: 8px; }
+
+.fb { border-radius: 12px; padding: 16px 18px; display: grid; gap: 6px; }
+.fb.ok { background: var(--good-soft); }
+.fb.no { background: var(--bad-soft); }
+.fb .v { font-weight: 700; font-size: 18px; }
+.fb.ok .v { color: var(--good); }
+.fb.no .v { color: var(--bad); }
+.fb .ans { font-family: var(--f-display); font-size: calc(19px * var(--qscale)); font-weight: 500; }
+.fb .why { color: var(--muted); }
+.fb .from { font-size: 14px; color: var(--muted); }
+.next-row { display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; }
+
+/* speaking */
+.speak .prompt { font-family: var(--f-display); font-weight: 500; font-size: calc(clamp(22px, 1rem + 1.8vw, 34px) * var(--qscale)); line-height: 1.35; }
+.model { background: var(--surface-2); border-radius: 12px; padding: 14px 16px; display: grid; gap: 4px; }
+.model b { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
+.model p { font-family: var(--f-display); font-size: calc(19px * var(--qscale)); }
+.listen { font-size: 15px; color: var(--muted); }
+.listen b { color: var(--ink); }
+.rate { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.rate button { border: 2px solid var(--rule); background: var(--surface); border-radius: 12px; padding: 14px; text-align: left; display: grid; gap: 2px; }
+.rate button b { font-size: 16px; }
+.rate button span { font-size: 14px; color: var(--muted); }
+.rate button:hover { border-color: var(--navy); }
+.rate .yes b { color: var(--good); }
+.rate .partly b { color: var(--gold); }
+.rate .no b { color: var(--bad); }
+
+/* results */
+.score { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; }
+.score .big { font-family: var(--f-display); font-weight: 600; font-size: 56px; color: var(--navy); line-height: 1; font-variant-numeric: tabular-nums; }
+.score .big small { font-size: 28px; color: var(--muted); font-weight: 500; }
+.score .lbl { color: var(--muted); }
+.stagebar { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-radius: 10px; overflow: hidden; border: 1px solid var(--rule); }
+.stagebar div { padding: 10px 12px; font-weight: 700; font-size: 15px; color: var(--muted); background: var(--surface-2); border-right: 1px solid var(--rule); }
+.stagebar div:last-child { border-right: 0; }
+.stagebar div.on { background: var(--navy); color: var(--navy-ink); }
+.stagebar div.on small { color: var(--navy-ink); opacity: .8; }
+.stagebar small { display: block; font-weight: 400; font-size: 13px; }
+.advice { font-size: 17px; }
+.advice b { color: var(--navy); }
+.review { list-style: none; margin: 0; padding: 0; display: grid; }
+.review li { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 10px; padding: 10px 0; border-top: 1px solid var(--rule); }
+.review .mk { font-weight: 700; }
+.review .mk.ok { color: var(--good); }
+.review .mk.no { color: var(--bad); }
+.review .gv { font-size: 14px; color: var(--muted); }
+.review .pp { font-size: 13px; color: var(--muted); }
+.section-label { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; color: var(--gold); }
+.miss { display: grid; gap: 8px; }
+.miss button { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 12px; align-items: center; text-align: left; background: var(--bad-soft); border: 0; border-radius: 10px; padding: 10px 14px; }
+.miss .n { font-family: var(--f-display); font-weight: 600; color: var(--bad); }
+.miss .go2 { font-size: 14px; font-weight: 700; color: var(--navy); white-space: nowrap; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chips span { background: var(--good-soft); color: var(--good); border-radius: 99px; padding: 3px 10px; font-size: 14px; font-weight: 600; }
+.caution { font-size: 14px; color: var(--muted); }
+
+@media (max-width: 760px) {
+  .modes { grid-template-columns: 1fr; }
+  .points { grid-template-columns: 1fr; }
+  .opts { grid-template-columns: 1fr; }
+  .rate { grid-template-columns: 1fr; }
+  .stage-key { grid-template-columns: 1fr; }
+  .notes { grid-template-columns: 1fr; gap: 2px; }
+  .notes dd { margin-bottom: 8px; }
+  .brand span, .brand i, .tool.fs { display: none; }
+  .brand { flex: 0 0 auto; }
+  .stagebar small { display: none; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .card { animation: rise .25s ease-out; }
+  @keyframes rise { from { transform: translateY(6px); } to { transform: none; } }
+}
+</style>
+<style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="shell">
+    <button class="brand" data-act="home" aria-label="LLI Lexilink Ideation — back to all points"><b>LLI</b><i></i><span>Lexilink Ideation</span></button>
+    <span class="lvl-chip" id="lvlChip"></span>
+    <div class="grow"></div>
+    <button class="tool" id="sizeBtn" data-act="size" title="Change question text size">Text size: M</button>
+    <button class="tool fs" data-act="full" title="Full screen for projecting">Full screen</button>
+  </div>
+</header>
+<main id="app"></main>
+
+<script>
+const L = {"code":"A1","name":"Breakthrough","next":"A2","units":[{"n":"Being and having","p":[{"t":"Subject pronouns and be: affirmative","c":"I can introduce myself and others using am, is and are.","ex":"I'm Lina. She's my teacher. They're from Spain.","w":"Leaving out be: She happy → She is happy.","r":"I am · you / we / they are · he / she / it is. Short forms: I'm, you're, she's, they're.","tip":"Point at people in the room: \"I'm…\", \"You're…\", \"She's…\". Students repeat, then point and say it themselves.","q":[["g","My sister ___ a doctor.",["is","are","am"],"My sister = she → is."],["g","We ___ from China.",["are","is","am"],"we → are."],["g","I ___ eleven years old.",["am","is","are"],"I → am. In English we say \"I am 11\", not \"I have 11\"."],["g","Anna is my classmate. ___ is very kind.",["She","He","It"],"Anna is a girl → she."],["g","Ben and Sam ___ in my class.",["are","is","am"],"Ben and Sam = they → are."],["c",["The children are happy.","The children is happy.","The children happy."],"children = they → are. Don't leave out be."],["e","They *is* my friends.","They are my friends.","they → are."],["e","I *is* hungry.","I am hungry.","I → am."],["o","She is my English teacher","."]],"s":[["Introduce yourself: your name, your age and where you are from.","I'm Leo. I'm ten. I'm from Shanghai."],["Point to two classmates and introduce them.","This is Mia. She's twelve. This is Tom. He's from Beijing."]]},{"t":"Be: negatives and yes/no questions","c":"I can ask and answer simple yes/no questions with be.","ex":"Are you a student? — No, I'm not.","w":"Is she is ready? → Is she ready?","r":"Negative: I'm not · isn't · aren't. Question: put be first — Is she…? Short answers: Yes, she is. / No, she isn't.","tip":"Quick-fire: ask \"Are you hungry? Is it Monday? Is your bag red?\" Students answer with short answers only.","q":[["g","___ you a student?",["Are","Is","Do"],"you → are. Put be first in the question."],["g","He ___ at school today. He's at home.",["isn't","aren't","not"],"he → isn't."],["g","Is your brother tall? — Yes, he ___.",["is","does","be"],"Short answer: Yes, he is. (Not \"Yes, he's.\")"],["g","We ___ late. We're early!",["aren't","isn't","am not"],"we → aren't."],["g","Are you cold? — No, ___.",["I'm not","I not","I amn't"],"There is no \"amn't\". Say I'm not."],["c",["Is she your sister?","Is she is your sister?","She is your sister is?"],"Question: Is + she + …? Use be only once."],["c",["I'm not tired.","I amn't tired.","I no tired."]],["e","*Are* he your teacher?","Is he your teacher?","he → is."],["o","Are they from Japan","?"]],"s":[["Ask your partner three yes/no questions with be.","Are you hungry? Is your bag new? Are your parents at home?"],["Answer with short answers: Are you a teacher? Is today Sunday? Is your mum at home?","No, I'm not. No, it isn't. Yes, she is."]]},{"t":"Wh- questions with be","c":"I can ask for basic personal information using what, where, who and how old.","ex":"Where are you from? How old is your brother?","w":"","r":"Question word + be + subject: Where are you from? What is your name? How old is he? Who is she?","tip":"Write what, where, who, how old, when on the board. Students make one question with each and ask a partner.","q":[["g","___ are you from? — I'm from Korea.",["Where","What","Who"],"Place → where."],["g","___ is your name? — It's Lily.",["What","Where","How"]],["g","___ is that man? — He's my uncle.",["Who","What","Where"],"Person → who."],["g","How old ___ your sisters?",["are","is","am"],"your sisters = they → are."],["g","___ is your birthday? — It's in May.",["When","Who","How old"],"Time → when."],["c",["Where is the bathroom?","Where the bathroom is?","Where is the bathroom is?"],"Question word + is + subject."],["e","Where *is* your parents?","Where are your parents?","your parents = they → are."],["o","What is your favourite colour","?"],["o","How old is your brother","?"]],"s":[["Ask me four questions: my name, my age, my home town and my favourite food.","What's your name? How old are you? Where are you from? What's your favourite food?"],["Interview a classmate, then tell the class two things about them.","Her name is Amy. She's from Hangzhou."]]},{"t":"Singular and plural nouns","c":"I can use regular and common irregular plural nouns.","ex":"one book, two books; a child, three children","w":"two childs → two children; peoples → people.","r":"Most nouns + -s. After s, sh, ch, x add -es (buses, boxes). Consonant + y → -ies (babies). Irregular: man→men, woman→women, child→children, person→people, foot→feet, tooth→teeth.","tip":"Hold up classroom objects one and two at a time; students say \"one pen, two pens\". Spend extra time on the irregular ones.","q":[["g","I have three ___.",["children","childs","childrens"],"child → children (irregular)."],["g","There are two ___ on the table.",["boxes","boxs","box"],"After x add -es."],["g","Five ___ are in the car.",["people","peoples","person"],"person → people."],["g","I have two ___ in my bag.",["dictionaries","dictionarys","dictionary"],"Consonant + y → -ies."],["g","My ___ are cold.",["feet","foots","feets"],"foot → feet."],["c",["The women are in the kitchen.","The womans are in the kitchen.","The womens are in the kitchen."],"woman → women."],["e","I brush my *tooths* every morning.","I brush my teeth every morning.","tooth → teeth."],["e","We have two *class* on Monday.","We have two classes on Monday.","After s add -es."],["g","There are lots of ___ in the city.",["buses","bus","buss"],"After s add -es."]],"s":[["Look around the room. Say five sentences with numbers.","There are twenty chairs, two windows, three boxes and one teacher."],["Tell me about your family: how many people, children, men and women?","There are five people in my family: two children, two women and one man."]]},{"t":"Articles: a, an and the (basic)","c":"I can use a/an for something new and the for something already known.","ex":"I have a dog. The dog is very big. It's an old house.","w":"a apple → an apple.","r":"a + consonant sound (a book, a useful book). an + vowel sound (an apple, an hour). the = we both know which one.","tip":"Say a noun; students shout \"a!\" or \"an!\". Include tricky ones: an hour, a uniform, an umbrella.","q":[["g","I eat ___ egg every morning.",["an","a","the"],"egg starts with a vowel sound → an."],["g","My dad is ___ engineer.",["an","a","(no word)"],"Jobs need a / an. engineer → an."],["g","I have a cat. ___ cat is black.",["The","A","An"],"Second time = we know which cat → the."],["g","We waited for ___ hour.",["an","a","(no word)"],"hour sounds like \"our\" — a vowel sound → an."],["g","It's ___ useful book.",["a","an","(no word)"],"useful sounds like \"you\" — a consonant sound → a."],["g","Can you close ___ door, please? It's cold.",["the","a","an"],"We both know which door → the."],["c",["She has an orange bag.","She has a orange bag.","She has orange bag."],"orange starts with a vowel sound → an."],["e","I want *a* apple, please.","I want an apple, please.","apple → an."],["o","I have an old bike","."]],"s":[["Name five things in your bag with a or an.","a pen, an eraser, a book, an apple, a phone"],["Say two sentences: \"I have a… The … is…\" about a pet or a thing you own.","I have a dog. The dog is brown and very funny."]]},{"t":"This, that, these, those","c":"I can point to and identify things near and far.","ex":"This is my pen. Are those your keys?","w":"","r":"Near: this (one) / these (more than one). Far: that (one) / those (more than one).","tip":"Hold one pen (this), point at the far wall (that), hold many pens (these), point at many far things (those). Students copy with their own things.","q":[["g","___ is my phone, here in my hand.",["This","That","These"],"One thing, near → this."],["g","Look at ___ birds in the sky!",["those","this","that"],"Many things, far → those."],["g","___ shoes are new. I'm wearing them now.",["These","Those","This"],"Many things, near → these."],["g","Who is ___ girl over there?",["that","this","those"],"One person, far → that."],["g","Are ___ your keys on the table over there?",["those","this","that"],"Many things, far → those."],["c",["These apples are sweet.","This apples are sweet.","These apple are sweet."],"Plural noun → these."],["e","*This* books are very heavy.","These books are very heavy.","books = plural → these."],["o","Is that your car over there","?"]],"s":[["Point to things near you and far away. Make four sentences with this, that, these and those.","This is my pen. That is the door. These are my books. Those are the windows."],["Ask me about three things in the room.","What's that? Are these your bags? Is this your chair?"]]},{"t":"Possessive adjectives","c":"I can show who something belongs to with my, your, his, her, its, our, their.","ex":"This is my sister. Her name is Mia.","w":"Mixing his/her: My mother and his car → her car.","r":"I→my · you→your · he→his · she→her · it→its · we→our · they→their. His / her depends on the owner, not on the thing.","tip":"Collect three items from boys and girls. Hold each up: \"Is this his pen or her pen?\" Students answer with the owner's name and his / her.","q":[["g","This is Maria. ___ brother is a pilot.",["Her","His","She"],"The owner is Maria → her."],["g","Tom loves ___ mother very much.",["his","her","he"],"The owner is Tom → his (even though the mother is a woman)."],["g","We love ___ new school.",["our","us","we"]],["g","My friends are here. ___ names are Leo and Mia.",["Their","There","They're"],"their = belonging to them."],["g","The dog is eating ___ food.",["its","it's","it"],"its = belonging to it. it's = it is."],["g","Excuse me, is this ___ bag?",["your","you","you're"]],["c",["What's your name?","What's you name?","What's yours name?"]],["e","My brother and *her* wife live in Paris.","My brother and his wife live in Paris.","The owner is my brother → his."],["o","Their house is very big","."]],"s":[["Describe a family member: name, age and job. Use his / her.","This is my uncle. His name is Jack. His job is a cook."],["Tell me about a friend's things: bag, phone, favourite food.","Her bag is pink. Her favourite food is noodles."]]},{"t":"Possessive 's","c":"I can use 's to talk about people's family and belongings.","ex":"This is Tom's bag. My parents' house is small.","w":"the bag of Tom → Tom's bag.","r":"One owner: Tom's bag. Plural owner ending in -s: my parents' house. Irregular plural: the children's toys. For people, say Tom's bag, not the bag of Tom.","tip":"Collect students' things in a box. Pull one out: \"Whose is this?\" — \"It's Lily's.\"","q":[["g","This is ___ bike.",["Sam's","Sams","Sam"]],["g","My ___ car is red. (I have two brothers. They share a car.)",["brothers'","brother's","brothers"],"Plural owner ending in -s → brothers'."],["g","The ___ room is upstairs.",["children's","childrens'","childs'"],"children → children's."],["g","Where is ___ phone?",["Mum's","Mums","Mum"]],["g","Is that the ___ ball?",["dog's","dogs","dog"]],["c",["Is this Anna's coat?","Is this the coat of Anna?","Is this Annas coat?"],"For people use 's: Anna's coat."],["e","It's my *fathers* car.","It's my father's car.","One owner → father's."],["o","This is my teacher's desk","."]],"s":[["Say who owns five things in the room.","That's Ben's bag. This is Anna's pen. That's the teacher's desk."],["Talk about your family members' things.","My dad's car is black. My sister's room is small."]]},{"t":"Have / have got for possession","c":"I can describe my family and the things I own.","ex":"I have two brothers. She's got a new phone.","w":"I have got not → I haven't got.","r":"I / you / we / they have (got) · he / she / it has (got). Negative: don't have / haven't got · doesn't have / hasn't got.","tip":"Students list five things they own and their family members, then tell a partner with have got.","q":[["g","She ___ two cats.",["has","have","haves"],"she → has."],["g","I ___ got a brother.",["have","has","am"]],["g","He ___ got a car.",["hasn't","haven't","doesn't"],"he → hasn't got."],["g","___ you got a pen?",["Have","Has","Do"]],["g","We ___ have a garden.",["don't","haven't","doesn't"],"With have (no got): don't have."],["g","Does she have a dog? — Yes, she ___.",["does","has","is"],"Does…? → Yes, she does."],["c",["Have you got any brothers?","Do you got any brothers?","Have you any brothers got?"]],["e","My grandma *have* got grey hair.","My grandma has got grey hair.","she → has."],["o","They have got a big house","."]],"s":[["Tell me about your family and pets with have got.","I've got one sister. I haven't got a pet."],["Ask a partner three questions: Have you got…? / Do you have…?","Have you got a bike? Do you have a pet?"]]}]},{"n":"Present simple","p":[{"t":"Present simple: affirmative","c":"I can describe my daily routine and regular habits.","ex":"I get up at seven. My dad works in a bank.","w":"He play → He plays (third person -s).","r":"I / you / we / they work · he / she / it works. Spelling: watch→watches, go→goes, study→studies, have→has.","tip":"Act out your morning (get up, have breakfast…). Students describe your day: \"She gets up at seven.\"","q":[["g","My dad ___ in a hospital.",["works","work","working"],"he → works."],["g","She ___ TV every evening.",["watches","watchs","watch"],"After ch add -es."],["g","My brother ___ to school by bus.",["goes","gos","go"],"go → goes."],["g","We ___ English on Mondays.",["study","studies","studys"],"we → no -s."],["g","Lucy ___ history at university.",["studies","studys","study"],"Consonant + y → -ies."],["c",["He has lunch at 12.","He haves lunch at 12.","He have lunch at 12."],"have → has."],["e","My sister *play* the piano every day.","My sister plays the piano every day.","he / she / it + -s."],["o","She gets up at seven o'clock","."]],"s":[["Describe your normal school day in five sentences.","I get up at 6:30. I have breakfast. I go to school by bus…"],["Describe a day for someone in your family.","My mum gets up at six. She works in an office. She gets home at seven."]]},{"t":"Present simple: negatives and questions","c":"I can make negatives and questions with do and does.","ex":"Do you like pizza? She doesn't eat meat.","w":"Does she likes …? → Does she like …?","r":"do / don't with I, you, we, they · does / doesn't with he, she, it. After does / doesn't the verb has no -s: Does she like…? She doesn't like…","tip":"Write \"does = the -s\" on the board. Show the -s moving: She likes → Does she like?","q":[["g","___ you like pizza?",["Do","Does","Are"]],["g","___ your brother play football?",["Does","Do","Is"],"your brother = he → does."],["g","She ___ eat meat.",["doesn't","don't","isn't"]],["g","Does he ___ in London?",["live","lives","living"],"After does, no -s."],["g","I ___ understand.",["don't","doesn't","not"]],["g","Do they speak English? — Yes, they ___.",["do","are","speak"]],["c",["My cat doesn't like water.","My cat doesn't likes water.","My cat don't like water."],"After doesn't, no -s."],["e","Does she *goes* to your school?","Does she go to your school?","After does, no -s."],["o","Does your mum drive to work","?"]],"s":[["Tell me three things you don't do at the weekend.","I don't get up early. I don't wear my uniform. I don't do homework on Saturday."],["Ask a partner three questions with Do you…? / Does your…?","Do you like music? Does your dad cook?"]]},{"t":"Adverbs of frequency","c":"I can say how often I do things, putting the adverb in the right place.","ex":"I usually walk to school. I'm never late.","w":"I go always → I always go.","r":"Frequency adverbs go before the main verb (I always walk) but after be (I'm never late). always · usually · often · sometimes · never.","tip":"Draw a 0–100% line with the adverbs on the board. Ask \"How often do you…?\"; students point to the line and answer.","q":[["g","I ___ have breakfast. I eat every morning.",["always","never","sometimes"],"every morning = always."],["g","How ___ do you go swimming?",["often","many","much"]],["o","I usually walk to school",".","Adverb before the main verb.",["Usually I walk to school"]],["o","She is never late",".","With be, the adverb goes after: is never."],["c",["He sometimes plays football.","He plays sometimes football.","Sometimes he play football."],"Adverb before the verb, and he → plays."],["c",["They are always happy.","They always are happy.","Always they are happy."],"After be: are always."],["e","I eat *never* fish.","I never eat fish.","Put the adverb before the main verb."],["e","My dad *always_is* tired after work.","My dad is always tired after work.","After be: is always."]],"s":[["How often do you…? watch TV, eat rice, play sport, read books. Use always, usually, sometimes, never.","I usually watch TV in the evening. I always eat rice. I never play sport."],["Tell me about a family member's habits.","My dad is always busy. He sometimes cooks dinner."]]},{"t":"Wh- questions with the present simple","c":"I can ask about times, places and routines.","ex":"What time do you start school? Where does he live?","w":"Where you live? → Where do you live?","r":"Question word + do / does + subject + verb: Where do you live? What time does it start?","tip":"Put the pattern on the board: QW + do/does + person + verb. Students build questions from word cards.","q":[["g","Where ___ you live?",["do","does","are"]],["g","What time ___ the film start?",["does","do","is"],"the film = it → does."],["g","What ___ your sister do? — She's a nurse.",["does","do","is"]],["g","How ___ you go to school? — By bike.",["do","does","are"]],["c",["When does he finish work?","When he finishes work?","When does he finishes work?"],"Use does, then the verb without -s."],["c",["What do you usually eat for lunch?","What you usually eat for lunch?","What do you usually eats for lunch?"]],["e","Where *you* buy your clothes?","Where do you buy your clothes?","Don't forget do."],["o","What time do you get up","?"],["o","Where does your father work","?"]],"s":[["Ask me four questions about my day (what time, where, how, what).","What time do you get up? Where do you work? How do you go to work?"],["Interview a partner about their weekend routine.","What do you do on Saturdays? Where do you go?"]]},{"t":"Like + -ing and would like","c":"I can talk about likes and dislikes and make polite requests.","ex":"I love reading. I'd like a glass of water, please.","w":"I like swim → I like swimming.","r":"like / love / hate + -ing for general likes: I love reading. Would like (I'd like) = want, politely: I'd like a coffee. Would you like to come?","tip":"Café role-play: one student is the waiter (\"What would you like?\"), the others order with I'd like…","q":[["g","I love ___ in the sea.",["swimming","swim","swims"],"love + -ing."],["g","She doesn't like ___ up early.",["getting","get","gets"]],["g","___ like a cup of tea, please.",["I'd","I","I'm"],"Polite request → I'd like."],["g","Would you like ___ to the cinema tonight?",["to come","coming","come"],"would like + to + verb."],["g","My brother hates ___ homework.",["doing","do","does"]],["c",["Do you like cooking?","Do you like cook?","Are you like cooking?"]],["c",["I'd like an orange juice, please.","I like an orange juice, please.","I'd liking an orange juice, please."],"To ask for something now, use I'd like."],["e","We like *go* to the park on Sundays.","We like going to the park on Sundays.","like + -ing."],["o","Would you like some water","?"]],"s":[["Tell me three things you love doing and two things you hate doing.","I love drawing and playing games. I hate cleaning my room."],["Order food and a drink in a café.","I'd like a burger and an apple juice, please."]]},{"t":"Imperatives","c":"I can give and understand simple instructions.","ex":"Open your books. Don't run in the corridor.","w":"","r":"Use the base verb for instructions: Sit down. Negative: Don't + verb. Add please to be polite.","tip":"Play \"Teacher says\" with classroom instructions; then students take turns giving them.","q":[["g","___ your books, please.",["Open","Opens","To open"]],["g","___ touch that! It's hot.",["Don't","Not","No"]],["g","___ quiet, please.",["Be","Are","Is"],"Imperative of be → Be."],["g","Please ___ late tomorrow.",["don't be","not be","don't"]],["c",["Don't eat in class.","No eat in class.","Not eat in class."]],["c",["Close the window, please.","You closing the window, please.","Closes the window, please."]],["e","*Not* run in the corridor!","Don't run in the corridor!","Negative instruction → Don't."],["o","Please write your name here",".","",["Write your name here please"]]],"s":[["Give a classmate five instructions to do in the classroom.","Stand up. Go to the door. Open it. Don't run. Sit down."],["Tell a new student the rules of our class.","Don't use your phone. Listen to the teacher. Speak English."]]}]},{"n":"Things, places and quantity","p":[{"t":"There is / there are","c":"I can describe what is in a room, a town or a picture.","ex":"There's a sofa. There are two windows.","w":"There is three chairs → There are three chairs.","r":"There is + one thing / uncountable (There's a park. There's some milk). There are + plural. Questions: Is there…? Are there…?","tip":"Show a picture of a room or street. Students say as many There is / There are sentences as they can in one minute.","q":[["g","There ___ three chairs in the room.",["are","is","have"],"Plural → there are."],["g","There ___ a bank near my house.",["is","are","have"]],["g","___ there a toilet here?",["Is","Are","Has"]],["g","There ___ any shops in my village.",["aren't","isn't","not"]],["g","Are there any eggs? — Yes, there ___.",["are","is","have"]],["c",["There's a big tree in the garden.","It has a big tree in the garden.","There are a big tree in the garden."],"To say something exists, use there is / there are, not it has."],["e","There *is* two cinemas in my town.","There are two cinemas in my town.","Plural → there are."],["o","Are there any students in the classroom","?"]],"s":[["Describe your bedroom with there is / there are.","There's a bed. There are two windows. There isn't a TV."],["Describe your town: what is there and what isn't there?","There's a big park. There aren't any cinemas."]]},{"t":"Prepositions of place","c":"I can say where things are using in, on, under, next to, between, behind.","ex":"The cat is under the table.","w":"","r":"in (inside) · on (on top / on a surface) · under · next to · between (two things) · behind · in front of · opposite.","tip":"Use a pen and a box. Move the pen; students call out the preposition. Then a student moves it and the class answers.","q":[["g","The keys are ___ my bag.",["in","on","between"],"Inside → in."],["g","The picture is ___ the wall.",["on","in","under"],"On a surface → on."],["g","The bank is ___ the café and the shop.",["between","next","under"],"Two things → between."],["g","My house is ___ to the school.",["next","between","opposite"],"next to."],["g","The teacher stands ___ the class.",["in front of","under","between"]],["g","The cat is hiding ___ the sofa. I can't see it.",["behind","on","between"]],["e","Put the books *in* the table.","Put the books on the table.","A table is a surface → on."],["o","The shoes are under the bed","."]],"s":[["Describe where five things are in this room.","The clock is on the wall. My bag is under the desk. Tom is next to Mia."],["Hide a pen. Your partner asks questions to find it.","Is it in your bag? Is it under the book? Is it behind you?"]]},{"t":"Countable and uncountable nouns with some / any","c":"I can talk about food and quantities using some and any.","ex":"We have some milk. Are there any eggs?","w":"some breads → some bread.","r":"Countable: an egg, two eggs. Uncountable (no plural): milk, bread, water, rice, money. some in positive sentences; any in negatives and questions. Offers: Would you like some…?","tip":"Make two columns, \"can count\" and \"can't count\". Students sort food words, then write a shopping list with some.","q":[["g","We need ___ milk.",["some","any","a"],"Positive sentence → some."],["g","There isn't ___ bread.",["any","some","a"],"Negative → any."],["g","Are there ___ apples in the fridge?",["any","some","a"],"Question → any."],["g","I'd like ___ water, please.",["some","any","a"],"water is uncountable → some (not a)."],["g","Can I have some ___, please?",["rice","rices","a rice"],"rice is uncountable — no -s."],["c",["I don't have any money.","I don't have some money.","I don't have any moneys."]],["e","I eat *breads* for breakfast.","I eat bread for breakfast.","bread is uncountable — no -s."],["e","There are *any* bananas on the table.","There are some bananas on the table.","Positive sentence → some."],["o","Have we got any cheese","?"]],"s":[["Plan a picnic. Say what you have and what you need.","We've got some bread. We haven't got any juice. We need some apples."],["Tell me what is in your fridge at home.","There's some milk and some eggs. There isn't any meat."]]},{"t":"How much / how many","c":"I can ask about quantity and price.","ex":"How many students are there? How much is this?","w":"How many money → How much money.","r":"How many + plural (How many books?). How much + uncountable (How much water?). Prices: How much is it? / How much are they?","tip":"Set up a shop with price tags. Students ask How much is…? / How much are…? and How many do you want?","q":[["g","How ___ brothers have you got?",["many","much","more"],"brothers = countable → many."],["g","How ___ money do you need?",["much","many","more"],"money = uncountable → much."],["g","How much ___ these shoes?",["are","is","do"],"shoes = plural → are."],["g","How many ___ are in your class?",["students","student","the student"]],["g","How ___ sugar do you want in your tea?",["much","many","any"]],["c",["How much is this T-shirt?","How many is this T-shirt?","How much costs this T-shirt?"]],["e","How *much* people live in your house?","How many people live in your house?","people = countable → many."],["o","How many languages do you speak","?"]],"s":[["Ask a partner four questions with How many / How much.","How many cousins have you got? How much water do you drink every day?"],["Role-play buying three things in a shop.","How much is this pen? — It's two dollars. How much are these apples?"]]},{"t":"Prepositions of time: at, on, in","c":"I can say when things happen.","ex":"at 7 o'clock, on Monday, in July, in 2025","w":"in Monday → on Monday.","r":"at + clock times (at 7:00, at night) · on + days and dates (on Monday, on 3 May) · in + months, years, seasons, parts of the day (in July, in 2025, in the morning).","tip":"Draw three boxes, AT · ON · IN. Call out time words; students say which box.","q":[["g","The class starts ___ nine o'clock.",["at","on","in"],"Clock time → at."],["g","My birthday is ___ June.",["in","on","at"],"Month → in."],["g","We have PE ___ Tuesday.",["on","in","at"],"Day → on."],["g","I was born ___ 2015.",["in","on","at"],"Year → in."],["g","I do my homework ___ the evening.",["in","on","at"],"Part of the day → in."],["g","Owls hunt ___ night.",["at","in","on"],"Fixed phrase: at night."],["c",["See you on Friday!","See you in Friday!","See you at Friday!"]],["e","I visit my grandparents *in* Sunday.","I visit my grandparents on Sunday.","Day → on."],["o","We have lunch at one o'clock",".","",["At one o'clock we have lunch"]]],"s":[["Tell me when: your birthday, your favourite TV show, school starts, your summer holiday.","My birthday is on 3 May. School starts at eight. My holiday is in July."],["Plan a weekend meeting with a partner: give the day and the time.","Let's meet on Saturday at ten in the morning."]]},{"t":"Object pronouns","c":"I can use me, you, him, her, it, us, them after verbs and prepositions.","ex":"Can you help me? I like them.","w":"Help I → Help me.","r":"I→me · you→you · he→him · she→her · it→it · we→us · they→them. Use object pronouns after verbs and prepositions.","tip":"Pass a ball around the class: \"I give it to him. He gives it to her.\" Students describe each pass.","q":[["g","Can you help ___?",["me","I","my"]],["g","I like Anna. I play with ___ every day.",["her","she","his"]],["g","Where are my keys? I can't find ___.",["them","they","it"],"keys = plural → them."],["g","This present is for Tom. Please give it to ___.",["him","he","his"]],["g","My friends and I are here. Please wait for ___.",["us","we","our"]],["c",["Look at them!","Look at they!","Look at their!"]],["e","My dad drives *we* to school.","My dad drives us to school.","After a verb → us."],["o","She always calls him on Sundays",".","",["On Sundays she always calls him"]]],"s":[["Talk about three people you know. What do you do with them?","I love my grandma. I visit her every week. My friends are fun. I play with them."],["Answer: Do you like cats? Do you know my sister? Can you see me?","Yes, I like them. No, I don't know her. Yes, I can see you."]]}]},{"n":"Ability, now and the past","p":[{"t":"Can / can't for ability and permission","c":"I can say what I can and can't do, and ask for permission.","ex":"I can swim. Can I open the window?","w":"She cans swim / can to swim → She can swim.","r":"can + base verb, the same for everyone: I can swim, she can swim (no -s, no to). Negative: can't. Questions: Can you…? Can I…? (permission)","tip":"Survey: students walk around asking Can you…? (swim, cook, ride a bike) and report back: \"Leo can cook.\"","q":[["g","She ___ speak three languages.",["can","cans","can to"],"can never takes -s or to."],["g","I can ___ a bike.",["ride","rides","to ride"]],["g","___ I open the window? It's hot.",["Can","Do","Am"],"Asking for permission → Can I…?"],["g","Penguins ___ fly.",["can't","don't can","not can"]],["g","Can you play chess? — Yes, I ___.",["can","do","play"]],["c",["My little brother can't read.","My little brother doesn't can read.","My little brother can't to read."]],["e","He *cans* play the guitar.","He can play the guitar.","can never takes -s."],["o","Can you speak Chinese","?"]],"s":[["Tell me three things you can do and two things you can't do.","I can swim and cook. I can't play the piano."],["Ask the teacher for permission three times.","Can I go to the toilet? Can I use a pencil? Can I sit here?"]]},{"t":"Present continuous for now","c":"I can describe what is happening at the moment.","ex":"I'm watching TV. They're playing football.","w":"I watching → I'm watching.","r":"am / is / are + verb-ing for now: I'm reading. Spelling: make→making, sit→sitting, swim→swimming.","tip":"Mime an action; students guess: \"You're cooking!\" Then students mime for each other.","q":[["g","Be quiet! The baby ___.",["is sleeping","sleeps","sleeping"],"Happening now → is sleeping."],["g","It ___ now. Take an umbrella.",["is raining","rains","raining"]],["g","What ___ you doing?",["are","do","is"]],["g","They ___ playing football right now.",["are","is","do"]],["g","I'm ___ a letter to my friend.",["writing","writeing","write"],"write → writing (drop the e)."],["g","He's ___ in the pool.",["swimming","swiming","swim"],"swim → swimming (double the m)."],["c",["She isn't working today.","She doesn't working today.","She not working today."]],["e","Listen! My sister *singing*.","Listen! My sister is singing.","Don't forget am / is / are."],["o","Are you listening to me","?"]],"s":[["Look at the class (or a picture). Say what five people are doing now.","Tom is reading. Mia is writing. The teacher is standing."],["You are on the phone. Tell a friend what you and your family are doing now.","I'm doing my homework. My mum is cooking. My dad is watching TV."]]},{"t":"Present simple vs present continuous","c":"I can choose between routines and actions happening now.","ex":"I usually walk, but today I'm taking the bus.","w":"","r":"Present simple = habits and facts (I walk to school every day). Present continuous = now or around now (Today I'm taking the bus). Signals: every day, usually ↔ now, today, Look!","tip":"Two columns on the board: \"usually\" and \"right now\". Students describe a usual Saturday, then what they are doing now.","q":[["g","I usually ___ tea, but today I'm drinking coffee.",["drink","am drinking","drinking"],"usually = habit → present simple."],["g","Look! Dad ___ the car.",["is washing","washes","wash"],"Look! = now → present continuous."],["g","She ___ in a bank. It's her job.",["works","is working","work"],"A permanent fact → present simple."],["g","What ___ now? — I'm reading.",["are you doing","do you do","you doing"]],["g","Water ___ at 100°C.",["boils","is boiling","boil"],"A fact → present simple."],["c",["We usually play football on Fridays.","We are usually playing football on Fridays.","We usually playing football on Fridays."]],["e","Shh! I *study* now.","Shh! I'm studying now.","now → present continuous."],["o","He is wearing a red jacket today",".","",["Today he is wearing a red jacket"]]],"s":[["Say what you usually do on Sundays, then what you are doing right now.","On Sundays I usually sleep late. Right now I'm sitting in class."],["Describe a person in a photo: what is their job, and what are they doing now?","She's a doctor. She works in a hospital. Now she's eating lunch."]]},{"t":"Adjectives: position and form","c":"I can describe people and things with adjectives before nouns or after be.","ex":"a red car; The car is red.","w":"a car red → a red car; reds shoes → red shoes.","r":"Adjectives go before the noun (a red car) or after be (The car is red). They never take -s: red shoes, not reds shoes.","tip":"Show pictures; students describe them twice: \"It's a big dog.\" / \"The dog is big.\"","q":[["c",["I have a new phone.","I have a phone new.","I have a news phone."],"Adjective before the noun."],["c",["They are nice people.","They are nices people.","They are people nice."],"Adjectives never take -s."],["g","She has ___.",["long hair","hair long","longs hair"]],["g","This is a very ___ book.",["interesting","interestings","interest"]],["g","My shoes are ___.",["old","olds","an old"],"Adjectives never take -s."],["e","We live in a house *big*.","We live in a big house.","Adjective before the noun."],["e","I like your *blues* shoes.","I like your blue shoes.","Adjectives never take -s."],["o","He has a small black dog",".","Size before colour."]],"s":[["Describe your best friend with five adjectives.","She's tall and funny. She has long black hair and big brown eyes."],["Describe your favourite place using adjective + noun.","It's a quiet park with big old trees and a small lake."]]},{"t":"Was / were","c":"I can say where I was and how things were in the past.","ex":"I was at home yesterday. Were you tired?","w":"","r":"I / he / she / it was · you / we / they were. Negative: wasn't / weren't. Questions: Were you…? Was it…?","tip":"Ask around the class: \"Where were you at 8 o'clock last night / yesterday afternoon?\"","q":[["g","I ___ at home yesterday.",["was","were","am"]],["g","We ___ tired after the game.",["were","was","are"]],["g","___ you at school on Monday?",["Were","Was","Did"]],["g","The film ___ very good. It was boring.",["wasn't","weren't","didn't"]],["g","Where ___ your parents last night?",["were","was","did"],"your parents = they → were."],["c",["Was it cold yesterday?","Did it cold yesterday?","Were it cold yesterday?"],"With adjectives use was / were, not did."],["e","My friends *was* at the party.","My friends were at the party.","they → were."],["o","Where were you last weekend","?"]],"s":[["Where were you yesterday at 7 pm, last Saturday, and on your last birthday?","I was at home. I was at my grandma's house. I was at a restaurant."],["Talk about your last holiday: where were you and what was it like?","I was in Sanya. The weather was hot. The beach was beautiful."]]},{"t":"Past simple: regular verbs","c":"I can talk about finished past actions with -ed verbs.","ex":"We watched a film last night.","w":"Spelling: stoped → stopped; studyed → studied.","r":"Add -ed: play→played, live→lived, stop→stopped, study→studied. The same form for everyone. Time words: yesterday, last week, ago.","tip":"Students write \"Yesterday I…\" sentences from verb cards (watch, play, cook, visit) and check each other's spelling.","q":[["g","We ___ a film last night.",["watched","watch","watching"],"last night → past simple."],["g","She ___ for the test all weekend.",["studied","studyed","studies"],"Consonant + y → -ied."],["g","The bus ___ in front of the school.",["stopped","stoped","stops"],"stop → stopped (double the p)."],["g","I ___ my grandma last Sunday.",["visited","visit","visitted"]],["g","They ___ in Canada in 2020.",["lived","liveed","live"],"Ends in e → just add -d."],["c",["He cleaned his room yesterday.","He cleans his room yesterday.","He cleanned his room yesterday."]],["e","Last week I *play* basketball with my friends.","Last week I played basketball with my friends.","last week → past simple."],["o","We walked to the park yesterday",".","",["Yesterday we walked to the park"]]],"s":[["Tell me five things you did yesterday using regular verbs.","I watched TV. I played games. I helped my mum. I cooked dinner. I listened to music."],["Talk about last weekend.","On Saturday I visited my cousins. We played football in the park."]]},{"t":"Past simple: common irregular verbs","c":"I can use common irregular past forms such as went, had, saw, ate.","ex":"I went to the beach and had lunch there.","w":"I goed → I went.","r":"Common irregular verbs: go→went · have→had · see→saw · eat→ate · get→got · make→made · buy→bought · take→took · come→came · do→did.","tip":"Quick-fire: say the verb, students say the past. Then a chain story where each student adds one sentence.","q":[["g","I ___ to the beach last summer.",["went","goed","go"],"go → went."],["g","We ___ pizza for dinner.",["had","haved","have"],"have → had."],["g","She ___ a new dress yesterday.",["bought","buyed","buy"],"buy → bought."],["g","I ___ a famous singer at the airport!",["saw","seed","see"],"see → saw."],["g","They ___ the bus to school this morning.",["took","taked","take"],"take → took."],["g","He ___ his homework after school.",["did","doed","done"],"do → did."],["c",["We ate noodles last night.","We eated noodles last night.","We eat noodles last night."],"eat → ate."],["e","My dad *buyed* a new car last month.","My dad bought a new car last month.","buy → bought."],["o","I got up late this morning",".","",["This morning I got up late"]]],"s":[["Tell me about yesterday. Use went, had, saw, ate and got.","I got up at seven. I had breakfast. I went to school. I ate noodles for lunch."],["Tell a short story about a fun day.","Last Sunday I went to the zoo. I saw a big panda. I bought an ice cream."]]},{"t":"Past simple: negatives and questions","c":"I can ask and answer questions about the past with did.","ex":"Did you see Anna? No, I didn't.","w":"Did you went? → Did you go?","r":"didn't + base verb: I didn't go. Did + subject + base verb: Did you go? Short answers: Yes, I did. / No, I didn't.","tip":"Show that did carries the past: went → did … go. Students find the mistake in sentences like \"Did you went?\"","q":[["g","___ you see the match last night?",["Did","Do","Were"]],["g","I didn't ___ my homework.",["do","did","done"],"After didn't, use the base verb."],["g","Did she call you? — No, she ___.",["didn't","doesn't","wasn't"]],["g","Where did you ___ on holiday?",["go","went","going"],"After did, use the base verb."],["g","What ___ you eat for lunch?",["did","were","was"]],["c",["We didn't watch TV yesterday.","We didn't watched TV yesterday.","We not watched TV yesterday."]],["e","Did you *went* to the party?","Did you go to the party?","After did, use the base verb."],["o","What time did you go to bed","?"]],"s":[["Ask a partner five questions about last weekend with Did you…?","Did you go out? Did you watch a film? Did you see your friends?"],["Tell me three things you didn't do yesterday.","I didn't play games. I didn't go shopping. I didn't eat meat."]]}]},{"n":"Linking ideas","p":[{"t":"And, but, or, because","c":"I can join simple sentences to give reasons and contrasts.","ex":"I like tea, but I don't like coffee because it's bitter.","w":"","r":"and adds · but contrasts · or gives a choice · because gives a reason: I'm tired because I got up early.","tip":"Give half-sentences on cards (\"I like cats…\"). Students finish them with and / but / because.","q":[["g","I like tea, ___ I don't like coffee.",["but","and","or"],"Contrast → but."],["g","Do you want juice ___ water?",["or","but","because"],"Choice → or."],["g","I stayed at home ___ I was ill.",["because","but","or"],"Reason → because."],["g","She plays the piano ___ the guitar.",["and","but","because"],"Adding → and."],["g","It was sunny, ___ it was very cold.",["but","or","because"],"Contrast → but."],["c",["I'm hungry because I didn't have breakfast.","I'm hungry, because of I didn't have breakfast.","I didn't have breakfast because I'm hungry."],"because + the reason."],["e","I like apples *but* bananas.","I like apples and bananas.","Two things you like → and."],["o","I can't come because I am busy",".","",["Because I am busy I can't come"]]],"s":[["Tell me about your favourite food, why you like it, and one food you don't like.","I love dumplings because they're delicious, but I don't like fish."],["Do you like weekends? Do you like school? Give reasons.","I like weekends because I can sleep late, but I have a lot of homework."]]}]}],"homeUrl":"./","otherUrl":"a2.html","otherLabel":"A2 Grammar Quick Checks","newTab":false};
+
+/* ---------- data prep ---------- */
+const P = [];
+L.units.forEach((u, ui) => { u.start = P.length + 1; u.p.forEach(p => { p.no = P.length + 1; p.unit = ui; P.push(p); }); u.end = P.length; });
+const TOTALQ = P.reduce((a, p) => a + p.q.length, 0);
+
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const pad = n => String(n).padStart(2, "0");
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const norm = s => s.toLowerCase().replace(/[,.!?]/g, "").replace(/\s+/g, " ").trim();
+const NOWORD = "(no word)";
+
+function fillGap(text, word) {
+  if (word === NOWORD) return text.replace(/ ___/, "").replace(/___ /, "");
+  return text.replace("___", word);
+}
+function prep(raw, point) {
+  const q = { t: raw[0], point };
+  if (q.t === "g") { q.text = raw[1]; q.answer = raw[2][0]; q.opts = shuffle(raw[2]); q.why = raw[3]; q.full = fillGap(raw[1], raw[2][0]); }
+  if (q.t === "c") { q.answer = raw[1][0]; q.opts = shuffle(raw[1]); q.why = raw[2]; q.full = raw[1][0]; }
+  if (q.t === "e") {
+    q.toks = raw[1].split(" ").map(w => { const m = /^\*(.+)\*([.,!?]?)$/.exec(w); return m ? { w: m[1].replace(/_/g, " ") + m[2], bad: true } : { w: w.replace(/_/g, " "), bad: false }; });
+    q.full = raw[2]; q.why = raw[3];
+  }
+  if (q.t === "o") {
+    q.words = raw[1].split(" ").map(w => w.replace(/_/g, " "));
+    q.punct = raw[2]; q.why = raw[3];
+    q.alts = [q.words.join(" "), ...(raw[4] || [])].map(norm);
+    let idx; do { idx = shuffle(q.words.map((_, i) => i)); } while (idx.every((v, i) => v === i) && q.words.length > 1);
+    q.bank = idx; q.placed = [];
+    q.full = q.words.join(" ") + q.punct;
+  }
+  return q;
+}
+const TYPE_LABEL = { g: "Choose the correct word", c: "Which sentence is correct?", e: "Tap the mistake", o: "Put the words in order" };
+
+/* ---------- state ---------- */
+const S = { view: "home", round: null, notes: false };
+let size = "m";
+try { size = localStorage.getItem("lli-qsize") || "m"; } catch (e) {}
+function applySize() {
+  document.documentElement.dataset.size = size;
+  document.getElementById("sizeBtn").textContent = "Text size: " + { m: "M", l: "L", xl: "XL" }[size];
+}
+
+function startPoint(no) {
+  const p = P[no - 1];
+  const items = shuffle(p.q).slice(0, Math.min(6, p.q.length)).map(r => prep(r, p));
+  S.round = { mode: "point", point: p, items, i: 0, res: [], speak: null, sprompt: p.s[Math.floor(Math.random() * p.s.length)], showModel: false };
+  S.view = "q"; S.notes = false; render(true);
+}
+function startUnit(ui) {
+  const u = L.units[ui];
+  const pools = u.p.map(p => ({ p, qs: shuffle(p.q) }));
+  const want = Math.min(10, pools.reduce((a, x) => a + x.qs.length, 0));
+  const items = [];
+  let order = shuffle(pools);
+  while (items.length < want) {
+    for (const x of order) { if (items.length >= want) break; const r = x.qs.pop(); if (r) items.push(prep(r, x.p)); }
+    order = shuffle(order);
+  }
+  S.round = { mode: "unit", unit: u, ui, items: shuffle(items), i: 0, res: [] };
+  S.view = "q"; render(true);
+}
+function startDiag() {
+  const items = P.map(p => prep(p.q[Math.floor(Math.random() * p.q.length)], p));
+  S.round = { mode: "diag", items, i: 0, res: [] };
+  S.view = "q"; render(true);
+}
+function again() {
+  const r = S.round;
+  if (r.mode === "point") startPoint(r.point.no);
+  else if (r.mode === "unit") startUnit(r.ui);
+  else startDiag();
+}
+
+/* ---------- answering ---------- */
+function cur() { return S.round.items[S.round.i]; }
+function answered() { return S.round.res[S.round.i] !== undefined; }
+function choose(k) {
+  const q = cur(); if (answered() || !q.opts || !q.opts[k]) return;
+  S.round.res[S.round.i] = { ok: q.opts[k] === q.answer, given: q.opts[k] };
+  render();
+}
+function tapWord(k) {
+  const q = cur(); if (answered()) return;
+  S.round.res[S.round.i] = { ok: q.toks[k].bad, given: q.toks[k].w, pick: k };
+  render();
+}
+function place(k) { const q = cur(); if (answered()) return; q.placed.push(k); render(); }
+function unplace(pos) { const q = cur(); if (answered()) return; q.placed.splice(pos, 1); render(); }
+function clearOrder() { const q = cur(); if (answered()) return; q.placed = []; render(); }
+function checkOrder() {
+  const q = cur(); if (answered() || q.placed.length !== q.words.length) return;
+  const given = q.placed.map(i => q.words[i]).join(" ");
+  S.round.res[S.round.i] = { ok: q.alts.includes(norm(given)), given: given + q.punct };
+  render();
+}
+function next() {
+  const r = S.round; if (!answered()) return;
+  r.i++;
+  if (r.i >= r.items.length) S.view = r.mode === "point" ? "speak" : "results";
+  render(true);
+}
+function rateSpeak(v) { S.round.speak = v; S.view = "results"; render(true); }
+
+/* ---------- render: home ---------- */
+function homeHTML() {
+  const next = L.next ? L.next : null;
+  return `
+  <section class="shell hero">
+    <div class="eyebrow">CEFR ${esc(L.code)} · ${esc(L.name)}</div>
+    <h1>${esc(L.code)} Grammar Quick Checks</h1>
+    <p>Short, reusable checks for every point on the LLI ${esc(L.code)} Grammar Mastery Checklist. Project them in class or use them one-to-one. Each round draws new questions, so you can run a point again and again.</p>
+    <div class="stats"><span><b>${P.length}</b> grammar points</span><span><b>${L.units.length}</b> units</span><span><b>${TOTALQ}</b> questions in the bank</span><span><b>6</b> questions + a speaking task per check</span></div>
+  </section>
+  <section class="shell modes" aria-label="Ways to check">
+    <button class="mode primary" data-act="diag">
+      <h3>Level diagnostic</h3>
+      <p>One question for each of the ${P.length} points. Shows which sessions to check next. About 15 minutes.</p>
+      <span class="go">Start diagnostic →</span>
+    </button>
+    <div class="mode">
+      <h3>Point check</h3>
+      <p>Six questions on one grammar point, then a speaking task. Suggests a checklist stage at the end. About 10 minutes.</p>
+      <span class="go">Choose a point below ↓</span>
+    </div>
+    <div class="mode">
+      <h3>Unit review</h3>
+      <p>Ten mixed questions across one unit. Good for revision lessons and before moving on.</p>
+      <span class="go">Use “Unit review” on any unit ↓</span>
+    </div>
+  </section>
+  <section class="shell">
+    <details class="guide">
+      <summary>Teacher guide: how to run a quick check</summary>
+      <div class="body">
+        <ol class="steps">
+          <li><span>Choose the point you have just taught, or one marked <b>Introduced</b> or <b>Practising</b> on the student's checklist.</span></li>
+          <li><span>Project the page (Full screen helps) or sit beside the student. Read each question aloud.</span></li>
+          <li><span>Students answer aloud, on mini whiteboards or on paper. Then tap the answer the student — or most of the class — gave. Keys 1, 2, 3 choose an option; Enter moves on.</span></li>
+          <li><span>Read the short explanation together after each answer. If several students get it wrong, open <b>Teacher notes</b> for the rule and a quick-fix activity.</span></li>
+          <li><span>Finish with the speaking task. Let the student answer in their own words, listen for the target grammar, then rate what you heard.</span></li>
+          <li><span>Use the suggested stage to update the Grammar Mastery Checklist. Press <b>New round</b> for a fresh set of questions any time.</span></li>
+        </ol>
+        <div class="stage-key">
+          <div><b>Introduced</b>Taught and understood with support.</div>
+          <div><b>Practising</b>Used in guided tasks; errors still happen.</div>
+          <div><b>Mastered</b>Used independently in real speaking or writing, about 80%+ accurate.</div>
+        </div>
+        <p class="note">A quick check shows control in practice questions. Before ticking Mastered, also look for correct use in the student's own speaking or writing on another day.</p>
+      </div>
+    </details>
+  </section>
+  ${L.units.map((u, ui) => `
+  <section class="shell unit">
+    <div class="unit-head">
+      <div><div class="u">Unit ${ui + 1}</div><h2>${esc(u.n)}</h2></div>
+      <span class="s">Sessions ${u.start === u.end ? u.start : u.start + "–" + u.end}</span>
+      <div class="grow"></div>
+      <button class="unit-btn" data-act="unit" data-v="${ui}">Unit review</button>
+    </div>
+    <div class="points">
+      ${u.p.map(p => `<button class="pt" data-act="point" data-v="${p.no}"><span class="n">${pad(p.no)}</span><span><span class="t">${esc(p.t)}</span><span class="c">${esc(p.c)}</span></span><span class="arrow" aria-hidden="true">›</span></button>`).join("")}
+    </div>
+  </section>`).join("")}
+  <footer class="shell"><span>LLI · Lexilink Ideation</span><span>${esc(L.code)} Grammar Quick Checks</span>${L.homeUrl ? `<a href="${esc(L.homeUrl)}">All levels</a>` : ""}${L.otherUrl ? `<a href="${esc(L.otherUrl)}"${L.newTab ? ' target="_blank" rel="noopener"' : ""}>${esc(L.otherLabel)} →</a>` : ""}</footer>`;
+}
+
+/* ---------- render: question ---------- */
+function progressHTML() {
+  const r = S.round;
+  return `<div class="progress" aria-hidden="true">${r.items.map((_, i) => {
+    const x = r.res[i]; return `<span class="${x ? (x.ok ? "ok" : "no") : (i === r.i && S.view === "q" ? "cur" : "")}"></span>`; }).join("")}${r.mode === "point" ? `<span class="sp ${S.view === "speak" ? "cur" : (r.speak ? "ok" : "")}"></span>` : ""}</div>`;
+}
+function crumbsHTML() {
+  const r = S.round;
+  let title;
+  if (r.mode === "point") title = `<small>Session ${pad(r.point.no)}</small>${esc(r.point.t)}`;
+  else if (r.mode === "unit") title = `<small>Unit ${r.ui + 1} review</small>${esc(r.unit.n)}`;
+  else title = `<small>${esc(L.code)} diagnostic</small>One question per grammar point`;
+  const notesBtn = r.mode === "point" && S.view !== "results" ? `<button class="notes-btn" data-act="notes" aria-expanded="${S.notes}">Teacher notes</button>` : "";
+  return `<div class="crumbs"><button class="back" data-act="home">← All points</button><div class="crumb-title">${title}</div><div class="grow"></div>${notesBtn}</div>`;
+}
+function notesHTML() {
+  const p = S.round.point;
+  return `<dl class="notes">
+    <dt>Rule</dt><dd>${esc(p.r)}</dd>
+    ${p.ex ? `<dt>Example</dt><dd><i>${esc(p.ex)}</i></dd>` : ""}
+    ${p.w ? `<dt>Listen for</dt><dd>${esc(p.w)}</dd>` : ""}
+    <dt>Quick fix</dt><dd>${esc(p.tip)}</dd>
+  </dl>`;
+}
+function questionHTML() {
+  const r = S.round, q = cur(), res = r.res[r.i], done = res !== undefined;
+  let body = "";
+  if (q.t === "g") {
+    const gapWord = done ? (res.ok ? q.answer : res.given) : "";
+    const gapShow = gapWord === NOWORD ? "—" : gapWord;
+    const gap = `<span class="gap ${done ? (res.ok ? "ok" : "no") : ""}">${done ? esc(gapShow) : "&nbsp;"}</span>`;
+    body = `<p class="qtext">${esc(q.text).replace("___", gap)}</p>` + optsHTML(q, res, false);
+  } else if (q.t === "c") {
+    body = optsHTML(q, res, true);
+  } else if (q.t === "e") {
+    body = `<div class="words">${q.toks.map((t, k) => {
+      let cls = ""; if (done) { if (t.bad) cls = "bad"; else if (res.pick === k) cls = "picked"; }
+      return `<button class="word ${cls}" data-act="word" data-v="${k}" ${done ? "disabled" : ""}>${esc(t.w)}</button>`; }).join("")}</div>`;
+  } else if (q.t === "o") {
+    const placedSet = new Set(q.placed);
+    body = `<div class="line ${done ? (res.ok ? "done-ok" : "done-no") : ""}" aria-label="Your sentence">
+        ${q.placed.length ? q.placed.map((k, pos) => `<button class="tile" data-act="unplace" data-v="${pos}" ${done ? "disabled" : ""}>${esc(q.words[k])}</button>`).join("") : `<span class="placeholder">Tap the words below in the right order.</span>`}
+        ${q.placed.length ? `<span class="punct">${esc(q.punct)}</span>` : ""}
+      </div>
+      ${done ? "" : `<div class="bank">${q.bank.map(k => `<button class="tile ${placedSet.has(k) ? "used" : ""}" data-act="place" data-v="${k}" ${placedSet.has(k) ? 'tabindex="-1" aria-hidden="true"' : ""}>${esc(q.words[k])}</button>`).join("")}</div>
+      <div class="order-tools"><button class="btn" data-act="checkorder" ${q.placed.length === q.words.length ? "" : "disabled"}>Check<span class="kbd">Enter</span></button><button class="btn ghost" data-act="clear">Clear</button></div>`}`;
+  }
+  let fb = "";
+  if (done) {
+    const why = q.why || q.point.r;
+    const from = r.mode !== "point" ? `<p class="from">Session ${pad(q.point.no)} · ${esc(q.point.t)}</p>` : "";
+    fb = `<div class="fb ${res.ok ? "ok" : "no"}" role="status">
+      <p class="v">${res.ok ? "Correct." : "Not quite."}</p>
+      <p class="ans">${esc(q.full)}</p>
+      <p class="why">${esc(why)}</p>${from}
+    </div>
+    <div class="next-row"><button class="btn" data-act="next" id="nextBtn">${r.i + 1 >= r.items.length ? (r.mode === "point" ? "Speaking task" : "See results") : "Next question"}<span class="kbd">Enter</span></button></div>`;
+  }
+  return `<div class="card">
+    <div class="qhead"><span class="qtype">${TYPE_LABEL[q.t]}</span><span class="qnum">Question ${r.i + 1} of ${r.items.length}</span></div>
+    ${body}${fb}
+  </div>`;
+}
+function optsHTML(q, res, sent) {
+  const done = res !== undefined;
+  return `<div class="opts ${sent ? "sent" : ""}">${q.opts.map((o, k) => {
+    let cls = ""; if (done) { if (o === q.answer) cls = "right"; else if (o === res.given) cls = "wrong"; }
+    return `<button class="opt ${cls}" data-act="opt" data-v="${k}" ${done ? "disabled" : ""}><span class="k">${k + 1}</span><span class="lbl">${esc(o)}</span></button>`; }).join("")}</div>`;
+}
+function speakHTML() {
+  const r = S.round, p = r.point, [prompt, model] = r.sprompt;
+  return `<div class="card speak">
+    <div class="qhead"><span class="qtype">Speaking task · free use</span><span class="qnum">Last step</span></div>
+    <p class="prompt">${esc(prompt)}</p>
+    <p class="listen">Let the student answer in their own words. <b>Listen for:</b> ${esc(p.w || p.r)}</p>
+    ${r.showModel ? `<div class="model"><b>Model answer</b><p>${esc(model)}</p></div>` : `<div><button class="btn ghost" data-act="model">Show model answer</button></div>`}
+    <div class="section-label">How did the student use ${esc(p.t.toLowerCase())}?</div>
+    <div class="rate">
+      <button class="yes" data-act="rate" data-v="yes"><b>Used it correctly</b><span>Accurate, without help</span></button>
+      <button class="partly" data-act="rate" data-v="partly"><b>Partly</b><span>Some errors or needed prompting</span></button>
+      <button class="no" data-act="rate" data-v="no"><b>Not yet</b><span>Avoided it or mostly wrong</span></button>
+    </div>
+    <div class="next-row"><button class="btn ghost" data-act="rate" data-v="skip">Skip speaking task</button></div>
+  </div>`;
+}
+
+/* ---------- render: results ---------- */
+function suggestion(pct, sp) {
+  if (pct >= 0.8 && sp === "yes") return { stage: 2, head: "Ready to confirm Mastered",
+    text: "Accurate in this check and correct in free speaking. Tick <b>Mastered</b> once you also see correct use in the student's own speaking or writing on another day." };
+  if (pct >= 0.8) return { stage: 1, head: "Practising",
+    text: sp === "skip" || !sp ? "Accurate in the practice questions. Run the speaking task next time to check free use before Mastered."
+      : "Accurate in the practice questions, but not yet secure in free speaking. Give more speaking and writing practice, then check again." };
+  if (pct >= 0.5) return { stage: 1, head: "Practising",
+    text: "Some errors. Open <b>Teacher notes</b>, go over the rule, do the quick-fix activity, then run a new round." };
+  return { stage: 0, head: "Introduced — reteach",
+    text: "Most answers were wrong. Reteach this point with the rule and the quick-fix activity in <b>Teacher notes</b> before practising again." };
+}
+function reviewList(r) {
+  return `<ul class="review">${r.items.map((q, i) => { const x = r.res[i];
+    return `<li><span class="mk ${x.ok ? "ok" : "no"}">${x.ok ? "✓" : "✗"}</span><div><div>${esc(q.full)}</div>${x.ok ? "" : `<div class="gv">${q.t === "e" ? "Tapped" : "Answered"}: ${esc(x.given)}</div>`}${r.mode !== "point" ? `<div class="pp">Session ${pad(q.point.no)} · ${esc(q.point.t)}</div>` : ""}</div></li>`; }).join("")}</ul>`;
+}
+function resultsHTML() {
+  const r = S.round, n = r.items.length, ok = r.res.filter(x => x.ok).length, pct = ok / n;
+  if (r.mode === "point") {
+    const sg = suggestion(pct, r.speak);
+    const spText = { yes: "Used it correctly", partly: "Partly", no: "Not yet", skip: "Skipped" }[r.speak] || "Skipped";
+    const nextP = r.point.no < P.length ? r.point.no + 1 : null;
+    return `<div class="card">
+      <div class="score"><span class="big">${ok}<small> / ${n}</small></span><span class="lbl">questions correct · Speaking: <b>${spText}</b></span></div>
+      <div class="section-label">Suggested checklist stage</div>
+      <div class="stagebar">${["Introduced", "Practising", "Mastered"].map((s, i) => `<div class="${i === sg.stage ? "on" : ""}">${s}<small>${["Taught, needs support", "Guided use, some errors", "Independent, 80%+"][i]}</small></div>`).join("")}</div>
+      <p class="advice"><b>${sg.head}.</b> ${sg.text}</p>
+      <div class="next-row" style="justify-content:flex-start">
+        <button class="btn" data-act="again">New round</button>
+        ${nextP ? `<button class="btn ghost" data-act="point" data-v="${nextP}">Next point: ${pad(nextP)} ${esc(P[nextP - 1].t)} →</button>` : ""}
+        <button class="btn ghost" data-act="home">All points</button>
+      </div>
+      <div class="section-label">Answers</div>
+      ${reviewList(r)}
+    </div>`;
+  }
+  // unit review & diagnostic
+  const byPoint = new Map();
+  r.items.forEach((q, i) => { const e = byPoint.get(q.point.no) || { p: q.point, ok: 0, n: 0 }; e.n++; if (r.res[i].ok) e.ok++; byPoint.set(q.point.no, e); });
+  const entries = [...byPoint.values()].sort((a, b) => a.p.no - b.p.no);
+  const missed = entries.filter(e => e.ok < e.n), got = entries.filter(e => e.ok === e.n);
+  const isDiag = r.mode === "diag";
+  return `<div class="card">
+    <div class="score"><span class="big">${ok}<small> / ${n}</small></span><span class="lbl">${isDiag ? `grammar points answered correctly` : `questions correct across ${entries.length} point${entries.length > 1 ? "s" : ""}`}</span></div>
+    ${missed.length ? `<div class="section-label">Run a point check on these</div>
+      <div class="miss">${missed.map(e => `<button data-act="point" data-v="${e.p.no}"><span class="n">${pad(e.p.no)}</span><span>${esc(e.p.t)}${e.n > 1 ? ` <span class="gv">(${e.ok} of ${e.n} correct)</span>` : ""}</span><span class="go2">Point check →</span></button>`).join("")}</div>`
+      : `<p class="advice"><b>No errors.</b> ${isDiag ? "Use point checks with speaking tasks to confirm Mastered for individual points." : "Run point checks with the speaking task to confirm free use."}</p>`}
+    ${got.length ? `<div class="section-label">Correct this time</div><div class="chips">${got.map(e => `<span>${pad(e.p.no)} ${esc(e.p.t)}</span>`).join("")}</div>` : ""}
+    <p class="caution">${isDiag ? "One question per point is a screening, not a final judgement. A correct answer can be a lucky guess, and one mistake can be a slip. Confirm with point checks." : "Use this to decide which points need another point check before you move on."}</p>
+    <div class="next-row" style="justify-content:flex-start">
+      <button class="btn" data-act="again">${isDiag ? "New diagnostic" : "New round"}</button>
+      <button class="btn ghost" data-act="home">All points</button>
+    </div>
+    <div class="section-label">Answers</div>
+    ${reviewList(r)}
+  </div>`;
+}
+
+/* ---------- main render ---------- */
+const app = document.getElementById("app");
+function render(scrollTop) {
+  if (S.view === "home") { app.innerHTML = homeHTML(); }
+  else {
+    const top = crumbsHTML() + progressHTML() + (S.round.mode === "point" && S.notes && S.view !== "results" ? notesHTML() : "");
+    const main = S.view === "q" ? questionHTML() : S.view === "speak" ? speakHTML() : resultsHTML();
+    app.innerHTML = `<section class="shell check">${top}${main}</section>`;
+  }
+  if (scrollTop) window.scrollTo(0, 0);
+  const nb = document.getElementById("nextBtn"); if (nb) nb.focus({ preventScroll: true });
+}
+
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-act]"); if (!b) return;
+  const v = b.dataset.v, act = b.dataset.act;
+  switch (act) {
+    case "home": S.view = "home"; S.round = null; render(true); break;
+    case "point": startPoint(+v); break;
+    case "unit": startUnit(+v); break;
+    case "diag": startDiag(); break;
+    case "again": again(); break;
+    case "opt": choose(+v); break;
+    case "word": tapWord(+v); break;
+    case "place": place(+v); break;
+    case "unplace": unplace(+v); break;
+    case "clear": clearOrder(); break;
+    case "checkorder": checkOrder(); break;
+    case "next": next(); break;
+    case "notes": S.notes = !S.notes; render(); break;
+    case "model": S.round.showModel = true; render(); break;
+    case "rate": rateSpeak(v); break;
+    case "size": size = { m: "l", l: "xl", xl: "m" }[size]; try { localStorage.setItem("lli-qsize", size); } catch (err) {} applySize(); break;
+    case "full": {
+      const d = document;
+      try { if (d.fullscreenElement) d.exitFullscreen?.(); else d.documentElement.requestFullscreen?.()?.catch?.(() => {}); } catch (err) {}
+      break; }
+  }
+});
+document.addEventListener("keydown", e => {
+  if (S.view !== "q" || e.altKey || e.ctrlKey || e.metaKey) return;
+  const q = cur();
+  if (/^[1-9]$/.test(e.key) && q.opts && !answered()) { e.preventDefault(); choose(+e.key - 1); }
+  else if (e.key === "Enter") {
+    if (e.target.closest && e.target.closest("button")) return; // native button click handles it
+    if (answered()) { e.preventDefault(); next(); }
+    else if (q.t === "o" && q.placed.length === q.words.length) { e.preventDefault(); checkOrder(); }
+  }
+});
+
+document.getElementById("lvlChip").textContent = L.code + " Quick Checks";
+applySize();
+render();
+</script>
+</body>
+</html>
