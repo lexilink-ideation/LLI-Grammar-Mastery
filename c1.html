@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LLI C1 Grammar Quick Checks</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<style>
+/* Layout: a single centred working column, like a teacher's clipboard. Home = units as numbered session rows; check = one large question card for projection. */
+:root {
+  --bg: #F4F6F9;
+  --surface: #FFFFFF;
+  --surface-2: #EEF2F6;
+  --ink: #1B2734;
+  --muted: #5B6878;
+  --rule: #D5DCE4;
+  --navy: #1F3A5F;
+  --navy-ink: #FFFFFF;
+  --gold: #8A6A2E;
+  --gold-soft: #F3EBDD;
+  --good: #23704F;
+  --good-soft: #E3F2EA;
+  --bad: #A8402F;
+  --bad-soft: #F8E7E3;
+  --focus: #2F6DB5;
+  --shadow: 0 1px 2px rgba(20,35,55,.06), 0 6px 20px rgba(20,35,55,.06);
+  --f-display: "Lexend", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --qscale: 1;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E1520; --surface: #162130; --surface-2: #1D2A3B; --ink: #E5EBF2; --muted: #9AA8B8; --rule: #2B3A4E;
+    --navy: #9DBDE6; --navy-ink: #0E1520; --gold: #D5B16E; --gold-soft: #2D2717;
+    --good: #6FCF9F; --good-soft: #15302A; --bad: #F0907F; --bad-soft: #3A1E1A; --focus: #8CB8F0;
+    --shadow: 0 1px 2px rgba(0,0,0,.3); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E1520; --surface: #162130; --surface-2: #1D2A3B; --ink: #E5EBF2; --muted: #9AA8B8; --rule: #2B3A4E;
+  --navy: #9DBDE6; --navy-ink: #0E1520; --gold: #D5B16E; --gold-soft: #2D2717;
+  --good: #6FCF9F; --good-soft: #15302A; --bad: #F0907F; --bad-soft: #3A1E1A; --focus: #8CB8F0;
+  --shadow: 0 1px 2px rgba(0,0,0,.3); color-scheme: dark;
+}
+:root[data-size="l"] { --qscale: 1.2; }
+:root[data-size="xl"] { --qscale: 1.45; }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 17px; line-height: 1.5; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, summary:focus-visible, a:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; }
+p { margin: 0; }
+
+.shell { max-width: 980px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* top bar */
+.topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--surface); border-bottom: 1px solid var(--rule); }
+.topbar .shell { display: flex; align-items: center; gap: 12px; padding-block: 10px; }
+.brand { display: flex; align-items: baseline; gap: 10px; min-width: 0; text-decoration: none; color: inherit; background: none; border: 0; padding: 0; }
+.brand b { font-family: var(--f-display); font-weight: 700; color: var(--navy); font-size: 22px; letter-spacing: .08em; }
+.brand span { font-size: 11px; letter-spacing: .22em; color: var(--muted); text-transform: uppercase; white-space: nowrap; }
+.brand i { width: 1px; height: 18px; background: var(--rule); align-self: center; }
+.topbar .grow { flex: 1; }
+.lvl-chip { font-family: var(--f-display); font-weight: 600; font-size: 13px; color: var(--gold); background: var(--gold-soft); padding: 3px 10px; border-radius: 99px; white-space: nowrap; }
+.tool { border: 1px solid var(--rule); background: var(--surface); border-radius: 8px; padding: 5px 10px; font-size: 14px; color: var(--muted); white-space: nowrap; }
+.tool:hover { color: var(--ink); border-color: var(--muted); }
+
+/* home */
+.hero { padding-block: 36px 22px; display: grid; gap: 10px; }
+.eyebrow { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); font-weight: 700; }
+.hero h1 { font-size: clamp(30px, 4.6vw, 44px); color: var(--navy); font-weight: 600; letter-spacing: -.01em; }
+.hero p { color: var(--muted); max-width: 62ch; font-size: 18px; }
+.stats { display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: 14px; color: var(--muted); padding-top: 4px; }
+.stats b { color: var(--ink); font-variant-numeric: tabular-nums; }
+
+.modes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding-bottom: 18px; }
+.mode { background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; padding: 16px 18px; display: grid; gap: 4px; align-content: start; }
+.mode h3 { font-size: 16px; font-weight: 600; color: var(--navy); }
+.mode p { font-size: 15px; color: var(--muted); }
+.mode.primary { background: var(--navy); border-color: var(--navy); text-align: left; }
+.mode.primary h3, .mode.primary p { color: var(--navy-ink); }
+.mode.primary p { opacity: .85; }
+.mode.primary .go { color: var(--navy-ink); }
+.go { font-weight: 700; font-size: 14px; color: var(--navy); margin-top: 6px; }
+
+.guide { background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; margin-bottom: 30px; }
+.guide summary { list-style: none; padding: 14px 18px; display: flex; gap: 10px; align-items: center; font-weight: 700; color: var(--navy); cursor: pointer; }
+.guide summary::-webkit-details-marker { display: none; }
+.guide summary::after { content: "+"; margin-left: auto; font-size: 22px; line-height: 1; color: var(--muted); font-weight: 400; }
+.guide[open] summary::after { content: "–"; }
+.guide .body { padding: 0 18px 18px; display: grid; gap: 14px; }
+.steps { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; counter-reset: s; }
+.steps li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; counter-increment: s; }
+.steps li::before { content: counter(s); font-family: var(--f-display); font-weight: 600; color: var(--gold); font-size: 15px; padding-top: 1px; }
+.stage-key { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.stage-key div { background: var(--surface-2); border-radius: 8px; padding: 10px 12px; font-size: 14px; color: var(--muted); }
+.stage-key b { display: block; color: var(--navy); font-size: 15px; }
+.note { font-size: 15px; color: var(--muted); border-left: 3px solid var(--gold); padding: 2px 0 2px 12px; }
+
+.unit { margin-bottom: 30px; }
+.unit-head { display: flex; align-items: end; gap: 12px; flex-wrap: wrap; border-bottom: 2px solid var(--navy); padding-bottom: 8px; margin-bottom: 4px; }
+.unit-head .u { font-size: 12px; letter-spacing: .16em; font-weight: 700; color: var(--gold); text-transform: uppercase; }
+.unit-head h2 { font-size: 21px; color: var(--navy); font-weight: 600; }
+.unit-head .s { font-size: 14px; color: var(--muted); }
+.unit-head .grow { flex: 1; }
+.unit-btn { border: 1px solid var(--navy); color: var(--navy); background: transparent; border-radius: 8px; padding: 5px 12px; font-size: 14px; font-weight: 600; }
+.unit-btn:hover { background: var(--navy); color: var(--navy-ink); }
+.points { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px; }
+.pt { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 12px; align-items: center; text-align: left; background: none; border: 0; border-bottom: 1px solid var(--rule); padding: 12px 4px; border-radius: 0; }
+.pt:hover { background: var(--surface); }
+.pt .n { font-family: var(--f-display); font-weight: 600; color: var(--muted); font-size: 17px; font-variant-numeric: tabular-nums; }
+.pt .t { font-weight: 700; color: var(--ink); line-height: 1.3; }
+.pt .c { display: block; font-size: 14px; color: var(--muted); line-height: 1.35; margin-top: 2px; }
+.pt .arrow { color: var(--navy); font-weight: 700; font-size: 18px; }
+
+footer { padding-block: 20px 40px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--rule); margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px 18px; }
+footer a { color: var(--navy); font-weight: 600; }
+
+/* check view */
+.check { padding-block: 18px 40px; display: grid; gap: 14px; }
+.crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+.back { background: none; border: 0; color: var(--navy); font-weight: 700; padding: 4px 0; }
+.crumb-title { font-family: var(--f-display); font-weight: 600; color: var(--navy); font-size: 18px; min-width: 0; }
+.crumb-title small { font-family: var(--f-body); font-weight: 700; color: var(--gold); letter-spacing: .12em; font-size: 12px; text-transform: uppercase; margin-right: 8px; }
+.crumbs .grow { flex: 1; }
+.progress { display: flex; gap: 4px; }
+.progress span { flex: 1; height: 6px; border-radius: 3px; background: var(--rule); }
+.progress span.ok { background: var(--good); }
+.progress span.no { background: var(--bad); }
+.progress span.cur { background: var(--navy); }
+.progress span.sp { flex: 0 0 34px; }
+
+.notes-btn { border: 1px solid var(--rule); background: var(--surface); border-radius: 8px; padding: 5px 12px; font-size: 14px; color: var(--muted); font-weight: 600; }
+.notes-btn[aria-expanded="true"] { background: var(--gold-soft); color: var(--gold); border-color: transparent; }
+.notes { background: var(--gold-soft); border-radius: 12px; padding: 16px 18px; display: grid; gap: 10px; grid-template-columns: 120px minmax(0, 1fr); font-size: 16px; }
+.notes dt { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); padding-top: 3px; }
+.notes dd { margin: 0; }
+
+.card { background: var(--surface); border: 1px solid var(--rule); border-radius: 16px; box-shadow: var(--shadow); padding: clamp(20px, 4vw, 40px); display: grid; gap: 22px; }
+.qhead { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: baseline; }
+.qtype { font-size: 13px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; color: var(--gold); }
+.qnum { font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.qtext { font-family: var(--f-display); font-weight: 500; font-size: calc(clamp(24px, 1rem + 2.2vw, 38px) * var(--qscale)); line-height: 1.35; color: var(--ink); overflow-wrap: anywhere; }
+.gap { display: inline-block; min-width: 3.2em; border-bottom: 3px solid var(--navy); text-align: center; padding: 0 .2em; line-height: 1.15; }
+.gap.ok { color: var(--good); border-color: var(--good); }
+.gap.no { color: var(--bad); border-color: var(--bad); text-decoration: line-through; }
+
+.opts { display: grid; gap: 10px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.opts.sent { grid-template-columns: 1fr; }
+.opt { display: flex; gap: 12px; align-items: center; text-align: left; background: var(--surface-2); border: 2px solid transparent; border-radius: 12px; padding: 14px 16px; font-family: var(--f-display); font-size: calc(clamp(18px, .9rem + 1vw, 24px) * var(--qscale)); font-weight: 500; min-width: 0; }
+.opt .k { flex: 0 0 auto; width: 1.6em; height: 1.6em; border-radius: 50%; display: grid; place-items: center; font-size: .62em; font-weight: 600; background: var(--surface); color: var(--muted); border: 1px solid var(--rule); }
+.opt .lbl { min-width: 0; overflow-wrap: anywhere; }
+.opt:hover:not(:disabled) { border-color: var(--navy); }
+.opt:disabled { cursor: default; opacity: .55; }
+.opt.right { background: var(--good-soft); border-color: var(--good); opacity: 1; }
+.opt.wrong { background: var(--bad-soft); border-color: var(--bad); opacity: 1; }
+
+.words { display: flex; flex-wrap: wrap; gap: .3em .25em; font-family: var(--f-display); font-weight: 500; font-size: calc(clamp(24px, 1rem + 2.2vw, 38px) * var(--qscale)); line-height: 1.4; }
+.word { background: none; border: 0; border-bottom: 2px dotted var(--rule); border-radius: 4px; padding: 0 .12em; font-family: inherit; font-weight: inherit; font-size: inherit; }
+.word:hover:not(:disabled) { background: var(--surface-2); border-bottom-color: var(--navy); }
+.word:disabled { cursor: default; }
+.word.bad { background: var(--good-soft); color: var(--good); border-bottom: 2px solid var(--good); }
+.word.picked { background: var(--bad-soft); color: var(--bad); border-bottom: 2px solid var(--bad); text-decoration: line-through; }
+
+.line { min-height: calc(64px * var(--qscale)); border: 2px dashed var(--rule); border-radius: 12px; padding: 10px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.line.done-ok { border-style: solid; border-color: var(--good); background: var(--good-soft); }
+.line.done-no { border-style: solid; border-color: var(--bad); background: var(--bad-soft); }
+.line .placeholder { color: var(--muted); font-size: 15px; padding-left: 4px; }
+.line .punct { font-family: var(--f-display); font-size: calc(clamp(18px, .9rem + 1vw, 24px) * var(--qscale)); color: var(--muted); }
+.bank { display: flex; flex-wrap: wrap; gap: 8px; min-height: 52px; }
+.tile { background: var(--surface); border: 2px solid var(--navy); color: var(--navy); border-radius: 10px; padding: 8px 14px; font-family: var(--f-display); font-weight: 500; font-size: calc(clamp(18px, .9rem + 1vw, 24px) * var(--qscale)); }
+.tile.used { visibility: hidden; }
+.line .tile { background: var(--navy); color: var(--navy-ink); }
+.line .tile:disabled { cursor: default; }
+.order-tools { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.btn { border: 0; border-radius: 10px; padding: 12px 22px; font-weight: 700; font-size: 16px; background: var(--navy); color: var(--navy-ink); }
+.btn:disabled { opacity: .4; cursor: default; }
+.btn.ghost { background: transparent; color: var(--navy); border: 1px solid var(--rule); }
+.btn .kbd { font-weight: 400; opacity: .7; font-size: 13px; margin-left: 8px; }
+
+.fb { border-radius: 12px; padding: 16px 18px; display: grid; gap: 6px; }
+.fb.ok { background: var(--good-soft); }
+.fb.no { background: var(--bad-soft); }
+.fb .v { font-weight: 700; font-size: 18px; }
+.fb.ok .v { color: var(--good); }
+.fb.no .v { color: var(--bad); }
+.fb .ans { font-family: var(--f-display); font-size: calc(19px * var(--qscale)); font-weight: 500; }
+.fb .why { color: var(--muted); }
+.fb .from { font-size: 14px; color: var(--muted); }
+.next-row { display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; }
+
+/* speaking */
+.speak .prompt { font-family: var(--f-display); font-weight: 500; font-size: calc(clamp(22px, 1rem + 1.8vw, 34px) * var(--qscale)); line-height: 1.35; }
+.model { background: var(--surface-2); border-radius: 12px; padding: 14px 16px; display: grid; gap: 4px; }
+.model b { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
+.model p { font-family: var(--f-display); font-size: calc(19px * var(--qscale)); }
+.listen { font-size: 15px; color: var(--muted); }
+.listen b { color: var(--ink); }
+.rate { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.rate button { border: 2px solid var(--rule); background: var(--surface); border-radius: 12px; padding: 14px; text-align: left; display: grid; gap: 2px; }
+.rate button b { font-size: 16px; }
+.rate button span { font-size: 14px; color: var(--muted); }
+.rate button:hover { border-color: var(--navy); }
+.rate .yes b { color: var(--good); }
+.rate .partly b { color: var(--gold); }
+.rate .no b { color: var(--bad); }
+
+/* results */
+.score { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; }
+.score .big { font-family: var(--f-display); font-weight: 600; font-size: 56px; color: var(--navy); line-height: 1; font-variant-numeric: tabular-nums; }
+.score .big small { font-size: 28px; color: var(--muted); font-weight: 500; }
+.score .lbl { color: var(--muted); }
+.stagebar { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-radius: 10px; overflow: hidden; border: 1px solid var(--rule); }
+.stagebar div { padding: 10px 12px; font-weight: 700; font-size: 15px; color: var(--muted); background: var(--surface-2); border-right: 1px solid var(--rule); }
+.stagebar div:last-child { border-right: 0; }
+.stagebar div.on { background: var(--navy); color: var(--navy-ink); }
+.stagebar div.on small { color: var(--navy-ink); opacity: .8; }
+.stagebar small { display: block; font-weight: 400; font-size: 13px; }
+.advice { font-size: 17px; }
+.advice b { color: var(--navy); }
+.review { list-style: none; margin: 0; padding: 0; display: grid; }
+.review li { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 10px; padding: 10px 0; border-top: 1px solid var(--rule); }
+.review .mk { font-weight: 700; }
+.review .mk.ok { color: var(--good); }
+.review .mk.no { color: var(--bad); }
+.review .gv { font-size: 14px; color: var(--muted); }
+.review .pp { font-size: 13px; color: var(--muted); }
+.section-label { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; color: var(--gold); }
+.miss { display: grid; gap: 8px; }
+.miss button { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 12px; align-items: center; text-align: left; background: var(--bad-soft); border: 0; border-radius: 10px; padding: 10px 14px; }
+.miss .n { font-family: var(--f-display); font-weight: 600; color: var(--bad); }
+.miss .go2 { font-size: 14px; font-weight: 700; color: var(--navy); white-space: nowrap; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chips span { background: var(--good-soft); color: var(--good); border-radius: 99px; padding: 3px 10px; font-size: 14px; font-weight: 600; }
+.caution { font-size: 14px; color: var(--muted); }
+
+@media (max-width: 760px) {
+  .modes { grid-template-columns: 1fr; }
+  .points { grid-template-columns: 1fr; }
+  .opts { grid-template-columns: 1fr; }
+  .rate { grid-template-columns: 1fr; }
+  .stage-key { grid-template-columns: 1fr; }
+  .notes { grid-template-columns: 1fr; gap: 2px; }
+  .notes dd { margin-bottom: 8px; }
+  .brand span, .brand i, .tool.fs { display: none; }
+  .brand { flex: 0 0 auto; }
+  .stagebar small { display: none; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .card { animation: rise .25s ease-out; }
+  @keyframes rise { from { transform: translateY(6px); } to { transform: none; } }
+}
+</style>
+<style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="shell">
+    <button class="brand" data-act="home" aria-label="LLI Lexilink Ideation — back to all points"><b>LLI</b><i></i><span>Lexilink Ideation</span></button>
+    <span class="lvl-chip" id="lvlChip"></span>
+    <div class="grow"></div>
+    <button class="tool" id="sizeBtn" data-act="size" title="Change question text size">Text size: M</button>
+    <button class="tool fs" data-act="full" title="Full screen for projecting">Full screen</button>
+  </div>
+</header>
+<main id="app"></main>
+
+<script>
+const L = {"code":"C1","name":"Effective Operational Proficiency","next":"C2","units":[{"n":"Hypothesis and modality","p":[{"t":"Inverted conditionals","c":"I can use formal inverted conditionals in writing and presentations.","ex":"Had I known, I would have acted. Should you need help, call us.","w":"Had I knew → Had I known.","r":"Formal conditionals can drop if and invert: Had I known… (= If I had known), Should you need… (= If you should need), Were I / Were it to… (= If I were). Negative: Had I not…, never Hadn't I…","tip":"Give business-email sentences with if. Students rewrite them formally with Should / Had / Were.","q":[["g","___ I known, I would have acted sooner.",["Had","If","Would"],"Had I known = If I had known."],["g","___ you require further information, please contact us.",["Should","Would","Had"],"Should you… = If you (should)…"],["g","___ I in your position, I would accept the offer.",["Were","Was","Had"],"Inverted second conditional → Were (never Was)."],["g","Had I ___ about the delay, I would have called.",["known","knew","know"]],["g","___ the weather improve, the match will go ahead.",["Should","Would","Had"]],["c",["Had we not left early, we would have missed the flight.","Hadn't we left early, we would have missed the flight.","Had we not leave early, we would have missed the flight."],"Inverted negative: Had we not… (no contraction)."],["c",["Were the government to raise taxes, there would be protests.","Were the government raise taxes, there would be protests.","Was the government to raise taxes, there would be protests."]],["e","*Had_I_knew* about the problem, I would have fixed it.","Had I known about the problem, I would have fixed it.","Had + past participle."]],"s":[["Rewrite formally: If you need help, call me. / If I had known, I'd have come. / If I were rich, I'd travel.","Should you need help, call me. Had I known, I would have come. Were I rich, I would travel."],["Write two sentences for a formal email using Should you… and Had we….","Should you have any questions, please do not hesitate to contact me. Had we received your form earlier, we could have processed it today."]]},{"t":"Advanced hypothetical: but for, if it weren't for, as if / as though","c":"I can express unreal situations with a range of structures.","ex":"But for your help, we'd have failed. He acts as if he owned the place.","w":"","r":"But for + noun / If it weren't for + noun = without (now). If it hadn't been for / But for = without (in the past). as if / as though + past for an unreal comparison: He acts as if he owned the place.","tip":"Students thank people who made a difference: \"If it hadn't been for my teacher, I would never have…\"","q":[["g","___ your help, we would have failed.",["But for","Except","Without of"]],["g","If it ___ for the rain, we'd be outside now.",["weren't","wasn't being","isn't"]],["g","If it hadn't ___ for my coach, I would have given up.",["been","be","being"]],["g","He talks as if he ___ everything.",["knew","knowing","had know"],"Unreal comparison → past form."],["g","She looked as though she ___ a ghost.",["had seen","saw it","has seen"]],["c",["If it weren't for my parents, I couldn't afford university.","If it isn't for my parents, I couldn't afford university.","If it weren't my parents, I couldn't afford university."]],["c",["But for the traffic, we'd have arrived on time.","But for there was traffic, we'd have arrived on time.","But the traffic, we'd have arrived on time."],"But for + noun."],["e","If it *wasn't_been* for you, I would have got lost.","If it hadn't been for you, I would have got lost.","Past → If it hadn't been for…"]],"s":[["Who or what has made a big difference in your life? Use If it hadn't been for… and But for….","If it hadn't been for my English teacher, I would never have applied abroad."],["Describe someone's behaviour using as if / as though.","My cat acts as if she owned the house."]]},{"t":"Mandative subjunctive","c":"I can use the subjunctive after verbs and adjectives of necessity.","ex":"I suggest that he be informed. It is essential that she attend.","w":"It is essential that she is … is informal; use be or should be in formal writing.","r":"After suggest, insist, recommend, demand and essential, vital, important + that, use the base form for every person: I suggest that he be informed. It is essential that she attend. British English also uses should + verb.","tip":"Students write formal recommendations for a school policy: \"We recommend that every student be given…\"","q":[["g","I suggest that he ___ informed immediately.",["be","is","was"],"Subjunctive → base form be."],["g","It is essential that she ___ the meeting.",["attend","attends","attended"],"Subjunctive → base form, even with she."],["g","The doctor recommended that he ___ smoking.",["stop","stops","stopped"]],["g","They insisted that the report ___ rewritten.",["be","was","is being"]],["g","It is vital that every student ___ a copy.",["receive","receives","received"]],["c",["We demand that the manager apologise.","We demand that the manager apologises to.","We demand the manager to apologise."],"demand + that + subjunctive; not demand someone to."],["e","The committee recommended that the plan *is* reconsidered.","The committee recommended that the plan be reconsidered.","Subjunctive → be."],["o","It is important that he be told","."]],"s":[["Make formal recommendations for your school or workplace using recommend / suggest that + base verb.","We recommend that every employee be given flexible hours."],["Write the rules for an exam in formal style using It is essential / important that….","It is essential that each candidate arrive fifteen minutes early."]]},{"t":"Advanced modality: may well, might as well, be to","c":"I can express nuanced likelihood, reluctant choices and formal plans.","ex":"We might as well start. Staff are to report by 9 am.","w":"","r":"may well / could well = quite likely. might as well = there's no better option. be to + verb = a formal plan or order: Staff are to report by 9 am. was to have done = a plan that didn't happen.","tip":"Students describe a boring evening (\"We might as well…\") and write formal instructions with are to.","q":[["g","Nothing good is on TV. We ___ go to bed.",["might as well","may well","are to"],"No better option → might as well."],["g","Most experts agree: prices ___ rise again next year.",["may well","might as well","are to"],"Quite likely → may well."],["g","All staff ___ report to reception by 9 am.",["are to","may well","might as well"],"A formal instruction → are to."],["g","The president is ___ visit Japan next month.",["to","will","going"]],["g","She was to ___ the opening speech, but she fell ill.",["have given","given","give having"],"A plan that didn't happen → was to have + past participle."],["c",["You might as well tell her the truth; she'll find out anyway.","You might well as tell her the truth; she'll find out anyway.","You may as good tell her the truth; she'll find out anyway."]],["e","Passengers *must_to* remain seated until the plane stops.","Passengers are to remain seated until the plane stops.","Formal instruction → be to + verb."],["o","We might as well start without him","."]],"s":[["Describe a situation where you had no better option, using might as well.","The last train had gone, so we might as well have stayed at the party."],["Write three formal instructions for visitors using are to / are not to.","Visitors are to sign in at reception. They are not to enter the laboratories."]]},{"t":"Continuous and perfect modals for speculation","c":"I can speculate about ongoing and completed actions.","ex":"She must have been working all night.","w":"","r":"modal + be + -ing for an action in progress now (She must be working). modal + have been + -ing for an action in progress in the past (She must have been working all night).","tip":"Show a scene (someone yawning at 9 am, holding three coffees). Students speculate about now and about last night.","q":[["g","She's not answering. She ___ be driving.",["might","must have","can't have"],"In progress now → modal + be + -ing."],["g","His eyes are red. He must have ___ crying.",["been","be","being"]],["g","They can't ___ waiting long — the bus only just left.",["have been","be been","had been"]],["g","Where's Tom? — He ___ be sleeping; his light's off.",["must","can't have","should have"]],["g","You ___ be joking! That can't be true.",["must","can't","should"]],["c",["She must have been working all night — she looks exhausted.","She must be worked all night — she looks exhausted.","She must have working all night — she looks exhausted."]],["e","He can't *have_be* listening — he didn't hear a word.","He can't have been listening — he didn't hear a word.","modal + have been + -ing."],["o","What could they have been talking about","?"]],"s":[["Your flatmate comes home at 6 am covered in paint. Speculate about what they've been doing.","She must have been painting a mural. She might have been working on her art project all night."],["Look at a photo or around the room. Speculate about what people are doing now and what they had been doing before.","That man must be waiting for someone. He might have been running — he's out of breath."]]}]},{"n":"Emphasis and information structure","p":[{"t":"Inversion after negative and restrictive adverbials","c":"I can use inversion after never, rarely, little, not until, only when.","ex":"Only when he left did I realise the truth.","w":"Only when he left I realised → did I realise.","r":"After never, rarely, seldom, little, hardly … when, no sooner … than, not until, only when / only after, under no circumstances at the start, invert the auxiliary and subject: Only when he left did I realise.","tip":"Students rewrite a plain story paragraph as a dramatic speech using inversion.","q":[["g","Only when he left ___ the truth.",["did I realise","I realised","I did realise"]],["g","No sooner had we arrived ___ it started to rain.",["than","when","that"],"No sooner … than."],["g","Hardly had I sat down ___ the phone rang.",["when","than","that"],"Hardly … when."],["g","Little ___ that she was being watched.",["did she know","she knew","knew she"]],["g","Not until the next morning ___ the damage.",["did we see","we saw","saw we"]],["c",["Under no circumstances should you open this door.","Under no circumstances you should open this door.","Under no circumstance should open you this door."]],["e","Only after the meeting *I_understood* the problem.","Only after the meeting did I understand the problem.","Only after … → inversion."],["o","Rarely have I seen such talent","."]],"s":[["Retell a surprising moment using No sooner … than or Hardly … when.","No sooner had I left the house than it started to pour."],["Give a formal warning using Under no circumstances / On no account / Only….","Under no circumstances should passengers leave their luggage unattended."]]},{"t":"Cleft and pseudo-cleft sentences (advanced)","c":"I can foreground key information with a range of cleft structures.","ex":"All I want is some peace. The reason why … is that …","w":"The reason is because → The reason is that.","r":"Use All … is / was, The thing (that) … is, The reason (why) … is that, What … did was + verb, It was only when … that. Say The reason is that…, not The reason is because…","tip":"Students answer \"Why are you learning English?\" with The reason … is that…, then share priorities with All I want is…","q":[["g","All I want ___ some peace and quiet.",["is","are","it is"]],["g","The reason I left is ___ I was unhappy.",["that","because","why"],"The reason … is that…"],["g","What she did ___ call the police.",["was","was to","did"]],["g","The thing ___ annoys me is the noise.",["that","what","it"]],["g","It was only when I moved abroad ___ I understood my parents.",["that","when","which"]],["c",["What happened was that the server crashed.","What happened it was that the server crashed.","That happened was that the server crashed."]],["e","The reason I'm late is *because* the bus broke down.","The reason I'm late is that the bus broke down.","The reason … is that…"],["o","What we need is more time","."]],"s":[["Answer with The reason … is that…: Why did you choose your school or job? Why do you live where you live?","The reason I chose this school is that it has excellent teachers."],["Talk about your priorities using All I want… and What I really need….","All I want this weekend is a long sleep. What I really need is a holiday."]]},{"t":"Fronting for emphasis and contrast","c":"I can move elements to the front for effect.","ex":"Strange as it may seem, … Much as I admire her, …","w":"","r":"Move a phrase to the front for emphasis or contrast: Strange as it may seem, … / Much as I admire her, … / Try as I might, … (= although). Pattern: adjective + as / though + subject + verb.","tip":"Students rewrite although-sentences using Much as… / Adjective as… / Try as I might…","q":[["g","Strange ___ it may seem, I actually enjoy exams.",["as","though it","that"]],["g","Much as I ___ her, I can't agree with her.",["admire","admiring","to admire"]],["g","Try as I ___, I couldn't open the jar.",["might","could","would"]],["g","Tired ___ we were, we kept walking.",["as","that","so"]],["g","Clever ___ she is, she sometimes makes silly mistakes.",["though","that","so"]],["g","___ as it was, the film had some good moments.",["Long","Longer","Length"]],["c",["Much as I like him, I don't trust him.","As much I like him, I don't trust him.","Much as I am like him, I don't trust him."]],["e","*Although_strange* as it sounds, it's true.","Strange as it sounds, it's true.","Adjective + as + subject + verb (no although)."]],"s":[["Make three sentences about yourself starting with Much as I…, Try as I might… and Strange as it may seem….","Much as I love coffee, I'm trying to drink less. Try as I might, I can't get up early."],["Rewrite with fronting: Although it was cold, we swam. Although I respect him, I disagree.","Cold as it was, we swam. Much as I respect him, I disagree."]]},{"t":"Emphatic devices: do, the very, whatsoever, by far","c":"I can intensify meaning precisely.","ex":"I do understand. There's no evidence whatsoever.","w":"","r":"Emphatic do (I do understand), the very (at the very end), whatsoever / at all after negatives (no evidence whatsoever), by far + superlative (by far the best).","tip":"Students answer doubts with emphatic do: \"You didn't study!\" — \"I did study!\"","q":[["g","I ___ understand how you feel — really.",["do","am","does"]],["g","There's no evidence ___.",["whatsoever","whatever","at all of"]],["g","It's ___ the best restaurant in town.",["by far","very","far more"]],["g","She ___ call you — she told me she did.",["did","was","has"]],["g","We arrived at the ___ last minute.",["very","really","much"]],["c",["He has no intention whatsoever of apologising.","He has no intention whatever at all of apologising.","He has whatsoever no intention of apologising."]],["e","She is *very_far* the most talented student in the class.","She is by far the most talented student in the class.","by far + superlative."],["o","I do hope you can come","."]],"s":[["Someone doubts you. Reply with emphatic do / did: \"You never help at home.\" \"You didn't read the book.\"","I do help at home — I cooked last night! I did read it; I just didn't like it."],["Describe the best thing you've ever eaten, seen or done using by far, the very and whatsoever.","It was by far the best meal of my life, and I had no complaints whatsoever."]]},{"t":"Ellipsis and substitution","c":"I can avoid repetition with so, not, do so, one(s) and ellipsis.","ex":"— Will it rain? — I hope not. She said she'd help and she did.","w":"","r":"Avoid repetition: so / not after hope, think, expect, be afraid (I hope so / I hope not). Use do so, one / ones, and leave out repeated verbs: She said she'd help, and she did.","tip":"Students answer yes/no questions only with I think so / I hope not / I'm afraid so / I doubt it.","q":[["g","Will it rain tomorrow? — I hope ___.",["not","no","don't"]],["g","Is the shop open? — I think ___.",["so","it","yes"]],["g","I don't like the red shoes, but I like the blue ___.",["ones","one","them"]],["g","He promised to call and he ___.",["did","called it","does"]],["g","Did you pass? — I'm afraid ___.",["not","no","don't"]],["c",["I asked her to help and she did so immediately.","I asked her to help and she did it so immediately.","I asked her to help and she so did immediately."]],["e","Do you think he'll come? — I don't think *it*.","Do you think he'll come? — I don't think so.","think + so."],["o","She said she would come and she did","."]],"s":[["Answer without repeating words: Will you pass? Is it going to snow? Do you need help?","I hope so. I doubt it. No, but thanks for offering."],["Tell me about two things you planned to do, and whether you did.","I meant to start running every morning, and I did. I was going to learn Spanish, but I didn't."]]}]},{"n":"Complex noun groups and clauses","p":[{"t":"Nominalisation","c":"I can turn verbs and adjectives into nouns for formal, concise style.","ex":"The rapid expansion of the city led to …","w":"Over-nominalising until the sentence becomes hard to follow.","r":"Turn verbs and adjectives into nouns for formal, concise writing: The city expanded rapidly → The rapid expansion of the city… Adverbs become adjectives (rapidly → rapid).","tip":"Students rewrite informal sentences in academic style with nominalisation, then check they are still clear.","q":[["g","The city grew rapidly. → The ___ growth of the city…",["rapid","rapidly","rapidity"],"Before a noun → adjective."],["g","Prices increased sharply. → There was a sharp ___ in prices.",["increase","increasing","increased"]],["g","They decided to close the factory. → The ___ to close the factory…",["decision","deciding","decide"]],["g","Because unemployment fell… → Due to the ___ in unemployment…",["fall","falling down","fell"]],["c",["The introduction of the new law led to protests.","The introduce of the new law led to protests.","The introducing the new law led to protests."]],["c",["Their failure to act caused serious problems.","Their fail to act caused serious problems.","They failing to act caused serious problems."]],["e","The *disappear* of the bees is worrying scientists.","The disappearance of the bees is worrying scientists.","disappear → disappearance."],["o","The rapid growth of tourism has damaged the coast","."]],"s":[["Rewrite formally: \"Lots of people moved to the cities, so housing got more expensive.\"","The large-scale migration to cities led to a significant rise in housing costs."],["Summarise a news story in two formal sentences, using nouns rather than verbs.","The closure of the factory resulted in the loss of 500 jobs."]]},{"t":"Complex noun phrases","c":"I can build and understand long noun phrases with pre- and post-modification.","ex":"a widely reported rise in youth unemployment across the region","w":"Subject–verb agreement in long subjects: The cost of the repairs are → is.","r":"Build information around a head noun with modifiers before and after it: a widely reported rise in youth unemployment across the region. The verb agrees with the head noun: The cost of the repairs is…","tip":"Students find the head noun in long subjects from news articles, then make the verb agree.","q":[["g","The cost of the repairs ___ higher than expected.",["was","were","are"],"Head noun = cost (singular)."],["g","A list of the candidates ___ on the website.",["is","are","have been"]],["g","The number of students in the classes ___ increasing.",["is","are","have"],"The number of … → singular."],["g","The results of the survey ___ surprising.",["were","was","is"],"Head noun = results (plural)."],["g","One of the main reasons for the delays ___ the weather.",["was","were","are"]],["c",["The quality of the products has improved.","The quality of the products have improved.","The quality of the products are improved."]],["e","The impact of these policies on small businesses *have* been significant.","The impact of these policies on small businesses has been significant.","Head noun = impact (singular)."],["o","A recent study of teenage sleep patterns found surprising results","."]],"s":[["Describe a trend from the news using one long noun phrase as the subject.","The sharp rise in the price of fresh vegetables has worried many families."],["Expand \"a problem\" by adding information before and after it.","a growing problem with plastic waste in coastal towns across Southeast Asia"]]},{"t":"Advanced participle clauses","c":"I can use perfect and passive participle clauses.","ex":"Having been told the news, she left immediately.","w":"Dangling participles: Having finished, the room was cleaned.","r":"Perfect (Having finished…) for an earlier action; passive (Having been told… / Built in…) for passive meaning. The participle's subject must be the subject of the main clause — avoid dangling participles.","tip":"Give dangling-participle sentences (\"Having finished, the room was cleaned\"). Students fix the subject.","q":[["g","___ the news, she left immediately.",["Having been told","Having told","Being telling"],"She was told → passive."],["g","___ in 1890, the bridge needs major repairs.",["Built","Having building","Being built"]],["g","___ his homework, he went out to play.",["Having finished","Finished","Having been finished"]],["g","___ twice for his rudeness, he was asked to leave.",["Having been warned","Having warned","Warning"]],["g","Not ___ what to do, I called my brother.",["knowing","known","having known it"]],["c",["Having finished the report, I sent it to my boss.","Having finished the report, it was sent to my boss.","Having finish the report, I sent it to my boss."],"The report didn't finish itself — the subject must be I."],["c",["Not having been invited, we stayed at home.","Having not invited, we stayed at home.","Not having invited, we stayed at home."]],["e","Having finished dinner, *the_dishes_were_washed*.","Having finished dinner, we washed the dishes.","Dangling participle: the dishes didn't finish dinner."]],"s":[["Describe yesterday using three advanced participle clauses (Having…, Having been…, -ed).","Having been woken by the alarm, I got up reluctantly. Having had breakfast, I left for work."],["Fix these: \"Walking into the room, the lights went off.\" \"Having been repaired, I collected my car.\"","As I walked into the room, the lights went off. Having been repaired, my car was ready to collect."]]},{"t":"Advanced relative structures","c":"I can use whereby, in which case, all of whom, the extent to which.","ex":"a system whereby users vote; ten applicants, all of whom were qualified","w":"all of them who → all of whom.","r":"whereby (= by which), in which case, at which point, all / some / none / both of whom / which, the extent to which, the way in which.","tip":"Students describe groups and systems: \"We have 20 staff, most of whom…\", \"a system whereby…\"","q":[["g","We interviewed ten applicants, all of ___ were qualified.",["whom","who","them"],"After of → whom (people)."],["g","They introduced a system ___ users can vote online.",["whereby","whereas","wherever"]],["g","The train may be late, in ___ case we'll take a taxi.",["which","what","that"]],["g","I bought three books, none of ___ I've read yet.",["which","them","that"]],["g","The film became boring, at ___ point I left.",["which","that","what"]],["c",["The extent to which this policy works is unclear.","The extent which this policy works is unclear.","The extent to that this policy works is unclear."]],["e","She has two brothers, both of *them* are doctors.","She has two brothers, both of whom are doctors.","Relative clause → both of whom."],["o","The way in which they treated us was unacceptable","."]],"s":[["Describe your family, class or team using most of whom / some of whom / none of whom.","I have twelve cousins, most of whom live in Beijing."],["Describe a system or rule at your school or company using whereby.","We have a system whereby students can swap classes once a term."]]},{"t":"Noun clauses as subjects and objects","c":"I can use whether-, what- and that-clauses in subject and object positions.","ex":"Whether he comes is irrelevant. What matters is the result.","w":"","r":"Use whether-, what-, how- and that-clauses as subjects or objects: Whether he comes is irrelevant. What matters is the result. That he lied is obvious (formal). Use whether, not if, as a subject.","tip":"Students complete opinions: \"What worries me is…\", \"Whether we succeed depends on…\"","q":[["g","___ he comes or not is irrelevant.",["Whether","If","That"],"As a subject → whether, not if."],["g","___ matters most is the result.",["What","That","It"]],["g","I can't remember ___ I left my keys.",["where","that","what"]],["g","How they managed it ___ a mystery.",["remains","remain","are remaining"],"A clause as subject → singular verb."],["g","___ she was guilty was clear to everyone.",["That","What","If"]],["c",["What surprised me was her reaction.","That surprised me was her reaction.","What surprised me were her reaction."]],["e","*If* we win or lose doesn't matter.","Whether we win or lose doesn't matter.","As a subject → whether."],["o","Whether the plan works depends on funding","."]],"s":[["Give opinions starting with What worries me…, What I find interesting… and Whether….","What worries me is the cost of housing. Whether young people can afford homes is a big question."],["Talk about a decision you're facing using whether / what / how clauses.","What I need to decide is whether to study abroad. How I'll pay for it is another question."]]}]},{"n":"Verb complementation and the passive","p":[{"t":"Passive reporting with perfect infinitives","c":"I can report claims about the past formally and impersonally.","ex":"He is alleged to have stolen the data.","w":"","r":"Subject + is said / thought / alleged / believed + to have + past participle for past events: He is alleged to have stolen the data. Ongoing past: is thought to have been hiding.","tip":"Students rewrite news headlines formally: \"Police say man stole painting\" → \"A man is said to have stolen…\"","q":[["g","He is alleged ___ the data.",["to have stolen","to steal","having stolen"],"Past event → to have + past participle."],["g","The painting is thought to have ___ in 1503.",["been painted","painted","been painting"]],["g","The suspect is believed to ___ the country last night.",["have left","leave","be leaving"]],["g","She is said ___ for the company for 40 years.",["to have worked","having worked","to working"]],["g","The ship is reported to have ___ near the coast.",["sunk","sink","sank"]],["c",["The fire is believed to have started in the kitchen.","The fire is believed to start in the kitchen yesterday.","The fire is believed that it started in the kitchen."]],["e","The minister is reported *to_resign* yesterday.","The minister is reported to have resigned yesterday.","Past event → to have + past participle."],["o","The thieves are thought to have escaped by car","."]],"s":[["Report three historical facts or legends formally with is said / believed to have….","The Great Wall is said to have taken centuries to build."],["Turn these headlines into formal reports: \"Police: man stole €1m\"; \"Experts think fire started at night\".","A man is alleged to have stolen €1 million. The fire is thought to have started during the night."]]},{"t":"Complex verb patterns and dummy it","c":"I can use patterns such as find it + adjective + to, and verb + object + complement.","ex":"I find it difficult to concentrate. They made it clear that …","w":"I find difficult to → I find it difficult to.","r":"Use it as an empty object before adjective + to-infinitive or a that-clause: I find it difficult to concentrate. They made it clear that… I'd appreciate it if… I take it (that)…","tip":"Students complete: \"I find it hard to…\", \"I'd appreciate it if…\", \"I take it that…\"","q":[["g","I find ___ difficult to concentrate in noisy places.",["it","(no word)","that"],"find + it + adjective + to."],["g","They made it ___ that we weren't welcome.",["clear","clearly","clarity"]],["g","I'd appreciate ___ if you could reply soon.",["it","that","this"]],["g","She considers it important ___ on time.",["to be","being","be"]],["g","We owe ___ to our parents to look after them.",["it","that","so"]],["c",["I find it impossible to work with him.","I find impossible to work with him.","I find it impossible working with him to."]],["e","I'd appreciate *if* you could call me back.","I'd appreciate it if you could call me back.","appreciate it if…"],["o","I take it that you agree","."]],"s":[["Tell me three things you find easy, hard and pointless, using I find it….","I find it easy to make friends. I find it hard to wake up early. I find it pointless to argue online."],["Write two polite requests for an email using I'd appreciate it if… and I would be grateful if….","I'd appreciate it if you could send the report by Friday."]]},{"t":"Passive gerunds, infinitives and the get-passive","c":"I can use being done, to have been done and get-passives appropriately.","ex":"She was proud to have been chosen. He got fired.","w":"","r":"being + past participle (She hates being interrupted); to be / to have been + past participle (proud to have been chosen). get + past participle in informal English, often for unexpected events: He got fired.","tip":"Students talk about things they like or hate having done to them, and unexpected events with got + past participle.","q":[["g","She was proud to ___ chosen for the team.",["have been","had been","has been"]],["g","Nobody enjoys ___ criticised in public.",["being","been","be"]],["g","He ___ fired for being late every day.",["got","was got","gets been"]],["g","The documents need ___ by a lawyer.",["to be checked","checking be","to checked"]],["g","I remember ___ taken to the zoo as a child.",["being","been","be"]],["c",["My bike got stolen last night.","My bike got steal last night.","My bike was got stolen last night."]],["e","I can't stand *being_ignore* in meetings.","I can't stand being ignored in meetings.","being + past participle."],["o","She hopes to be promoted next year","."]],"s":[["Tell me about something unexpected that happened to you or someone you know, using got + past participle.","My phone got stolen on the metro. My friend got promoted after only six months."],["Talk about things you hate or love having done to you: being photographed, being praised…","I hate being photographed, but I love being surprised."]]},{"t":"Causative and permissive structures, active and passive","c":"I can use make, let, have and be made to accurately.","ex":"He was made to apologise.","w":"He was made apologise → He was made to apologise.","r":"Active: make / let + person + base verb (They made him apologise). Passive: be made to + verb (He was made to apologise). let has no passive: use be allowed to.","tip":"Students describe childhood rules: \"My parents made me… / I was made to… / I was allowed to…\"","q":[["g","He was made ___ for his behaviour.",["to apologise","apologise","apologising"],"Passive → be made to."],["g","The teacher made us ___ the essay again.",["rewrite","to rewrite","rewriting"],"Active → make + person + base verb."],["g","My parents let me ___ up late at weekends.",["stay","to stay","staying"]],["g","We weren't ___ to leave the room during the exam.",["allowed","let","made"]],["g","The prisoners were made ___ in silence.",["to work","work","working"]],["c",["I was allowed to choose my own subjects.","I was let to choose my own subjects.","I was let choose my own subjects."],"let has no passive → be allowed to."],["e","He was made *apologise* in front of the class.","He was made to apologise in front of the class.","Passive → be made to."],["o","They made us wait for two hours","."]],"s":[["Describe the rules when you were a child using made me, let me, was made to and was allowed to.","My parents made me practise piano every day. I was allowed to watch TV at weekends."],["Describe a strict teacher or boss you know.","She made us hand in homework every day, and we were never allowed to use our phones."]]},{"t":"Future in the past and imminence","c":"I can use was to have, be on the verge of, be about to.","ex":"We were on the verge of signing the deal.","w":"","r":"be about to / be on the point of / be on the verge of + -ing = very soon. was to + verb = what was going to happen later (destiny). was to have + past participle = a plan that didn't happen.","tip":"Students tell near-miss stories: \"We were on the verge of giving up when…\"","q":[["g","We were on the verge ___ the deal when they changed their minds.",["of signing","to sign","sign"]],["g","I was on the point ___ when the phone rang.",["of leaving","to leave","leave"]],["g","She was ___ become one of the most famous writers of her time.",["to","about","going"]],["g","The concert was to ___ last night, but it was cancelled.",["have taken place","take place having","took place"]],["g","Hurry up — the film is ___ to start.",["about","going","on the point"]],["c",["Scientists are on the verge of a major breakthrough.","Scientists are on the verge to a major breakthrough.","Scientists are on the verge of make a major breakthrough."]],["e","The company was on the point of *close* when a buyer appeared.","The company was on the point of closing when a buyer appeared.","on the point of + -ing."],["o","Little did he know he was to become president","."]],"s":[["Tell a near-miss story: you were about to / on the point of doing something when….","I was on the verge of quitting my job when I got an amazing offer."],["Talk about a famous person's early life using was to….","As a child she was very shy, but she was to become a world-famous singer."]]}]},{"n":"Cohesion and stance","p":[{"t":"Hedging and epistemic stance","c":"I can position claims with appropriate caution in academic and professional writing.","ex":"It could be argued that … This tends to suggest …","w":"","r":"Position claims precisely: It could be argued that…, This tends to suggest…, There is some evidence that…, arguably, apparently, to a certain extent, appear / seem to.","tip":"Take overconfident claims from a student essay. Students hedge them for academic writing.","q":[["g","It ___ be argued that the policy has failed.",["could","must","should"]],["g","These results tend to ___ that diet matters.",["suggest","suggesting","suggestion"]],["g","There is ___ evidence that sleep improves memory.",["some","a","many"],"evidence is uncountable."],["g","This is, ___, the most important factor.",["arguably","argue","arguing"]],["g","The problem appears ___ more complex than we thought.",["to be","being","be"]],["c",["The data would seem to indicate a decline.","The data would seems to indicate a decline.","The data would seem indicating a decline."]],["e","This small study *proves* that coffee causes cancer.","This small study suggests that coffee may increase the risk of cancer.","A small study can't prove anything → hedge the claim."],["o","This may well be the case","."]],"s":[["Rewrite for an academic essay: \"Video games make children violent.\" \"Online learning doesn't work.\"","There is some evidence that violent video games may increase aggression in some children. It could be argued that online learning is less effective for younger students."],["Give a careful, balanced opinion on a topic you know well.","Arguably, social media has improved communication, although there is growing evidence that it may harm young people's mental health."]]},{"t":"Advanced concessive linkers","c":"I can use albeit, notwithstanding, even so, granted.","ex":"The results were positive, albeit limited.","w":"","r":"albeit + adjective / adverb / noun phrase (positive, albeit limited) — never + a full clause. notwithstanding (= despite, formal). even so / all the same (= despite that). Granted, … (= I admit that…).","tip":"Students write balanced reviews of a product using albeit, even so and granted.","q":[["g","The results were positive, ___ limited.",["albeit","although","despite"]],["g","It's expensive. ___, I think it's worth it.",["Even so","Albeit","Notwithstanding that"]],["g","___ the difficulties, the project was a success.",["Notwithstanding","Albeit","Even so"]],["g","___, the plan has flaws, but it's the best we have.",["Granted","Albeit","Notwithstanding"]],["g","She was exhausted. All the ___, she finished the race.",["same","while","though"]],["g","We made progress, ___ slowly.",["albeit","despite","even so"]],["c",["He accepted the offer, albeit reluctantly.","He accepted the offer, albeit he was reluctant.","He accepted the offer, albeit of reluctance."],"albeit + adverb / adjective, not a full clause."],["e","*Albeit* it was raining, the match continued.","Although it was raining, the match continued.","albeit can't introduce a full clause → although."]],"s":[["Write a balanced review of a phone, film or restaurant using albeit, even so and granted.","The food was excellent, albeit expensive. Granted, the service was slow. Even so, I'd go back."],["Defend a decision you made despite its disadvantages.","Granted, moving abroad was risky. Even so, it was the best decision I've ever made."]]},{"t":"Summarising reference: this + noun, former / latter","c":"I can link ideas across sentences with summary nouns.","ex":"Prices rose by 20%. This increase …","w":"Vague this with no clear referent.","r":"Link ideas with this / that / these + a summary noun: Prices rose by 20%. This increase… Use the former / the latter for the first / second of two things.","tip":"Students read a short paragraph and replace every vague this with this + a precise summary noun.","q":[["g","Prices rose by 20% last year. This ___ hit poor families hardest.",["increase","increasing","increased"]],["g","Some people blame the government. ___ view is popular online.",["This","These","Those"]],["g","We considered Paris and Rome, and chose ___ because of the food.",["the latter","the last","latter"]],["g","Many students cheat in online exams. This ___ worries universities.",["problem","problems","problematic"]],["c",["Tea and coffee are both popular; the former is more common in China.","Tea and coffee are both popular; the first one of them is more common in China.","Tea and coffee are both popular; former is more common in China."]],["c",["The factory closed in 2020. This decision cost 500 jobs.","The factory closed in 2020. This cost 500 jobs it.","The factory closed in 2020. These decision cost 500 jobs."]],["e","Many young people are leaving rural areas. This *are* a serious problem.","Many young people are leaving rural areas. This trend is a serious problem.","this + summary noun + singular verb."],["o","These findings support the original theory","."]],"s":[["Describe a recent change in your city in two sentences, linking them with this + a summary noun.","Rents have doubled in five years. This trend is forcing young people to move out."],["Compare two options and refer back to them with the former and the latter.","I could study in London or Sydney. The former is closer to my family; the latter is warmer."]]},{"t":"Advanced comparison","c":"I can use nowhere near, every bit as, all the more, by far.","ex":"The sequel is every bit as good as the original.","w":"","r":"nowhere near / not nearly as … as (= much less), every bit as … as (= equally), all the more + adjective (= even more, because of…), by far / easily + superlative, twice / three times as … as.","tip":"Students compare two films, cities or products using every bit as, nowhere near and twice as.","q":[["g","The sequel is ___ bit as good as the original.",["every","all","very"]],["g","This flat is ___ near as big as our old one.",["nowhere","not","anywhere"]],["g","Knowing she'd been ill made her win ___ the more impressive.",["all","much","so"]],["g","The new phone is twice ___ expensive as the old one.",["as","so","more"]],["g","She's ___ the best player on the team.",["easily","very","much more"]],["c",["The exam was nowhere near as hard as I expected.","The exam was nowhere as near hard as I expected.","The exam was nowhere near hard as I expected."]],["e","The second book is *all_bit* as exciting as the first.","The second book is every bit as exciting as the first.","every bit as … as."],["o","It was not nearly as expensive as I feared","."]],"s":[["Compare two films, phones or cities using every bit as, nowhere near as and twice as.","The remake is nowhere near as good as the original, but it's twice as long!"],["Describe an achievement that was all the more impressive because of the circumstances.","Her win was all the more impressive because she'd been injured."]]},{"t":"Advanced quantifiers and determiners","c":"I can use a great many, the vast majority, scarcely any, neither of which.","ex":"The vast majority of respondents agreed.","w":"a great many people is → are.","r":"a great / good many + plural; a great deal of + uncountable; the vast majority of + plural noun + plural verb; scarcely any / hardly any; neither of which / both of which.","tip":"Students report survey results: \"The vast majority of respondents…\", \"Scarcely any…\"","q":[["g","A great ___ people attended the conference.",["many","deal","much"],"people is plural → a great many."],["g","We spent a great ___ of money on the house.",["deal","many","lot many"],"money is uncountable → a great deal of."],["g","The vast majority of respondents ___ the plan.",["support","supports","is supporting"]],["g","There was ___ any food left by nine o'clock.",["scarcely","few","little"]],["g","I applied for two jobs, neither of ___ I got.",["which","them","those"]],["c",["A good many of my friends live abroad.","A good deal of my friends live abroad.","A good many of my friend lives abroad."]],["e","A great deal of *people* complained about the service.","A great many people complained about the service.","a great deal of + uncountable; people needs a great many."],["o","Hardly any students failed the test","."]],"s":[["Report the results of an imaginary class survey using the vast majority, a great many and scarcely any.","The vast majority of students prefer online homework. Scarcely any want longer lessons."],["Describe your town's facilities using a great deal of, a good many and hardly any.","There are a good many parks, but hardly any cinemas."]]}]},{"n":"Precision and register","p":[{"t":"Advanced article use: generic and abstract reference","c":"I can use articles for generic, abstract and collective meanings.","ex":"The elderly need support. The computer has changed society.","w":"","r":"Generic reference: plural with no article (Computers have changed society); the + singular for a whole class or invention (The computer has changed society); the + adjective for a group of people (the elderly, the rich, the unemployed).","tip":"Students discuss inventions and social groups: \"The smartphone has…\", \"The elderly need…\"","q":[["g","___ elderly often feel lonely.",["The","(no word)","An"],"the + adjective = a group of people."],["g","___ computer has changed the way we work.",["The","A","(no word)"],"the + singular = the whole class (an invention)."],["g","The government should do more to help ___ unemployed.",["the","(no word)","an"]],["g","___ tigers are an endangered species.",["(no word)","The","A"]],["g","Who invented ___ telephone?",["the","a","(no word)"]],["c",["The rich should pay more tax.","The riches should pay more tax.","Rich should pay more tax."]],["e","The government is building more homes for the *poors*.","The government is building more homes for the poor.","the + adjective has no -s."],["o","The smartphone has transformed modern life","."]],"s":[["Discuss how one invention has changed society using the + singular noun.","The smartphone has transformed the way we communicate."],["What should the government do for the elderly, the young and the unemployed?","The elderly need better healthcare, and the unemployed need more training."]]},{"t":"Tense and aspect for politeness and distance","c":"I can use past and continuous forms to sound tentative and polite.","ex":"I was wondering if you could … I'd hoped to finish today.","w":"","r":"Past and continuous forms sound more tentative and polite: I was wondering if you could… I'd hoped to… We were hoping you might…","tip":"Students rewrite direct requests to a boss or teacher using the past continuous and softer modals.","q":[["g","I ___ wondering if you could help me.",["was","am being","were"]],["g","We ___ hoping you might join us.",["were","are been","had"]],["g","I'd ___ to finish today, but it's taking longer.",["hoped","hope","hoping"]],["g","I've been ___ to ask you something.",["meaning","meant","mean"]],["c",["I was hoping we could discuss my salary.","I am hoping we could to discuss my salary.","I was hope we could discuss my salary."]],["c",["I wondered whether you'd had a chance to read my email.","I wonder whether you have chance to read my email.","I was wondered whether you'd had a chance to read my email."]],["e","We *was* hoping you could come to the launch.","We were hoping you could come to the launch.","we → were."],["o","I was wondering if you could help me","."]],"s":[["Make these requests more polite: \"Give me a day off.\" \"Check my essay.\" \"Lend me your car.\"","I was wondering if I could take Friday off. I was hoping you might have time to check my essay."],["Role-play asking your boss for a pay rise, politely.","I was hoping we could talk about my salary. I'd been wondering whether there might be an opportunity for a review."]]},{"t":"Sentence adverbials and adverb placement","c":"I can use frankly, admittedly, presumably and place adverbs for focus.","ex":"Admittedly, the plan has flaws.","w":"","r":"Sentence adverbials comment on the whole sentence: frankly, admittedly, presumably, understandably, surprisingly, hopefully. Placement changes focus: Only Tom passed / Tom only passed.","tip":"Students react to news stories by starting with a sentence adverbial: \"Understandably, people were upset.\"","q":[["g","___, the plan has some weaknesses — I won't deny it.",["Admittedly","Presumably","Hopefully"]],["g","She's not here. ___ she's stuck in traffic.",["Presumably","Frankly","Admittedly"]],["g","___, I don't care what he thinks.",["Frankly","Presumably","Hopefully"]],["g","The flight was cancelled. ___, passengers were angry.",["Understandably","Presumably","Frankly"]],["g","___ enough, he didn't mind at all.",["Strangely","Strange","Strangeness"]],["c",["Only Tom passed the test. (Nobody else did.)","Tom only passed the test. (Nobody else did.)","Tom passed only the test. (Nobody else did.)"],"Put only next to the word it focuses on."],["e","*Surprising*, nobody noticed the mistake.","Surprisingly, nobody noticed the mistake.","Sentence adverbial → -ly form."],["o","Hopefully the weather will improve","."]],"s":[["React to three pieces of news, starting each comment with a sentence adverbial.","Understandably, the parents were furious. Surprisingly, the school didn't respond. Hopefully, it won't happen again."],["Give your honest opinion of something using frankly and admittedly.","Frankly, the new timetable is a disaster. Admittedly, it does give us longer lunches."]]},{"t":"Register shifting in grammar","c":"I can adjust grammar between formal and informal contexts.","ex":"Formal: Should you require … / Informal: If you need anything, …","w":"","r":"Formal grammar: passive, nominalisation, inversion (Should you…), no contractions, longer noun phrases. Informal grammar: contractions, phrasal verbs, ellipsis (Sounds good), get-passive, direct questions.","tip":"Students write the same message for a friend (text) and for a client (email).","q":[["c",["Should you require assistance, please contact reception. (formal notice)","Need help? Give reception a shout. (formal notice)","If you need help, ring reception, OK? (formal notice)"],"A formal notice needs formal grammar."],["c",["Can't make it tonight — sorry! (text to a friend)","I regret to inform you that I shall be unable to attend this evening. (text to a friend)","Please be advised that my attendance this evening is not possible. (text to a friend)"],"A text to a friend needs informal grammar."],["g","Formal: Your application ___ carefully considered.",["has been","got","'s been"]],["g","Formal: We would be grateful ___ you could reply by Friday.",["if","that","for"]],["g","Informal: ___ you later!",["See","Seeing","We shall see"]],["c",["Payment must be received by 30 June. (formal letter)","You've got to pay by 30 June. (formal letter)","Pay up by 30 June! (formal letter)"]],["e","Dear Sir, I am writing about the job. I *wanna* know if it is still open.","Dear Sir, I am writing to enquire about the position. I would like to know whether it is still available.","Formal letter → no slang or contractions."],["o","Please find attached a copy of my CV","."]],"s":[["Say the same message twice: tell a friend and then your manager that you'll be late.","Running late, sorry — be there in 10! / I'm afraid I'm running a little late and expect to arrive in about ten minutes."],["Turn this formal notice into a casual message: \"Residents are reminded that refuse should be placed outside by 7 am.\"","Hey, don't forget to put the bins out before 7!"]]},{"t":"Grammar and punctuation: apposition and sentence boundaries","c":"I can use appositives and non-defining clauses with correct punctuation.","ex":"Dr Lee, the project leader, will speak first.","w":"Comma splices: It was late, we left → It was late, so we left.","r":"An appositive renames a noun and sits between commas: Dr Lee, the project leader, will speak first. Don't join two full sentences with only a comma (comma splice); use a full stop, a semicolon or a linking word.","tip":"Give a paragraph with comma splices and missing appositive commas. Students correct the punctuation.","q":[["c",["It was late, so we left.","It was late, we left.","It was late so, we left."],"Two full sentences need a linker, not just a comma."],["c",["Dr Lee, the project leader, will speak first.","Dr Lee the project leader, will speak first.","Dr Lee, the project leader will speak first."],"An appositive needs a comma on both sides."],["c",["The report was finished; however, it was never published.","The report was finished, however, it was never published.","The report was finished however; it was never published."],"however can't join sentences with commas → semicolon before it."],["c",["My sister, a nurse in London, works night shifts.","My sister a nurse in London works night shifts.","My sister, a nurse in London works night shifts."]],["g","I loved the film, ___ my brother hated it.",["but","however","he"],"Joining with a comma → use a conjunction like but."],["g","Paris, ___ capital of France, attracts millions of visitors.",["the","a","an"],"There's only one capital → the."],["g","She didn't call; ___, she sent a long email.",["instead","but","so"]],["e","The train was cancelled, *we* took a taxi instead.","The train was cancelled, so we took a taxi instead.","Comma splice → add a linker (or use a full stop)."]],"s":[["Introduce three people you know with an appositive.","Lily, my best friend from school, now lives in Canada."],["Join these correctly in three different ways: \"It was raining. We stayed inside.\"","It was raining, so we stayed inside. It was raining; we stayed inside. Because it was raining, we stayed inside."]]}]}],"homeUrl":"./","otherUrl":"c2.html","otherLabel":"C2 Grammar Quick Checks","newTab":false};
+
+/* ---------- data prep ---------- */
+const P = [];
+L.units.forEach((u, ui) => { u.start = P.length + 1; u.p.forEach(p => { p.no = P.length + 1; p.unit = ui; P.push(p); }); u.end = P.length; });
+const TOTALQ = P.reduce((a, p) => a + p.q.length, 0);
+
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const pad = n => String(n).padStart(2, "0");
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const norm = s => s.toLowerCase().replace(/[,.!?]/g, "").replace(/\s+/g, " ").trim();
+const NOWORD = "(no word)";
+
+function fillGap(text, word) {
+  if (word === NOWORD) return text.replace(/ ___/, "").replace(/___ /, "");
+  return text.replace("___", word);
+}
+function prep(raw, point) {
+  const q = { t: raw[0], point };
+  if (q.t === "g") { q.text = raw[1]; q.answer = raw[2][0]; q.opts = shuffle(raw[2]); q.why = raw[3]; q.full = fillGap(raw[1], raw[2][0]); }
+  if (q.t === "c") { q.answer = raw[1][0]; q.opts = shuffle(raw[1]); q.why = raw[2]; q.full = raw[1][0]; }
+  if (q.t === "e") {
+    q.toks = raw[1].split(" ").map(w => { const m = /^\*(.+)\*([.,!?]?)$/.exec(w); return m ? { w: m[1].replace(/_/g, " ") + m[2], bad: true } : { w: w.replace(/_/g, " "), bad: false }; });
+    q.full = raw[2]; q.why = raw[3];
+  }
+  if (q.t === "o") {
+    q.words = raw[1].split(" ").map(w => w.replace(/_/g, " "));
+    q.punct = raw[2]; q.why = raw[3];
+    q.alts = [q.words.join(" "), ...(raw[4] || [])].map(norm);
+    let idx; do { idx = shuffle(q.words.map((_, i) => i)); } while (idx.every((v, i) => v === i) && q.words.length > 1);
+    q.bank = idx; q.placed = [];
+    q.full = q.words.join(" ") + q.punct;
+  }
+  return q;
+}
+const TYPE_LABEL = { g: "Choose the correct word", c: "Which sentence is correct?", e: "Tap the mistake", o: "Put the words in order" };
+
+/* ---------- state ---------- */
+const S = { view: "home", round: null, notes: false };
+let size = "m";
+try { size = localStorage.getItem("lli-qsize") || "m"; } catch (e) {}
+function applySize() {
+  document.documentElement.dataset.size = size;
+  document.getElementById("sizeBtn").textContent = "Text size: " + { m: "M", l: "L", xl: "XL" }[size];
+}
+
+function startPoint(no) {
+  const p = P[no - 1];
+  const items = shuffle(p.q).slice(0, Math.min(6, p.q.length)).map(r => prep(r, p));
+  S.round = { mode: "point", point: p, items, i: 0, res: [], speak: null, sprompt: p.s[Math.floor(Math.random() * p.s.length)], showModel: false };
+  S.view = "q"; S.notes = false; render(true);
+}
+function startUnit(ui) {
+  const u = L.units[ui];
+  const pools = u.p.map(p => ({ p, qs: shuffle(p.q) }));
+  const want = Math.min(10, pools.reduce((a, x) => a + x.qs.length, 0));
+  const items = [];
+  let order = shuffle(pools);
+  while (items.length < want) {
+    for (const x of order) { if (items.length >= want) break; const r = x.qs.pop(); if (r) items.push(prep(r, x.p)); }
+    order = shuffle(order);
+  }
+  S.round = { mode: "unit", unit: u, ui, items: shuffle(items), i: 0, res: [] };
+  S.view = "q"; render(true);
+}
+function startDiag() {
+  const items = P.map(p => prep(p.q[Math.floor(Math.random() * p.q.length)], p));
+  S.round = { mode: "diag", items, i: 0, res: [] };
+  S.view = "q"; render(true);
+}
+function again() {
+  const r = S.round;
+  if (r.mode === "point") startPoint(r.point.no);
+  else if (r.mode === "unit") startUnit(r.ui);
+  else startDiag();
+}
+
+/* ---------- answering ---------- */
+function cur() { return S.round.items[S.round.i]; }
+function answered() { return S.round.res[S.round.i] !== undefined; }
+function choose(k) {
+  const q = cur(); if (answered() || !q.opts || !q.opts[k]) return;
+  S.round.res[S.round.i] = { ok: q.opts[k] === q.answer, given: q.opts[k] };
+  render();
+}
+function tapWord(k) {
+  const q = cur(); if (answered()) return;
+  S.round.res[S.round.i] = { ok: q.toks[k].bad, given: q.toks[k].w, pick: k };
+  render();
+}
+function place(k) { const q = cur(); if (answered()) return; q.placed.push(k); render(); }
+function unplace(pos) { const q = cur(); if (answered()) return; q.placed.splice(pos, 1); render(); }
+function clearOrder() { const q = cur(); if (answered()) return; q.placed = []; render(); }
+function checkOrder() {
+  const q = cur(); if (answered() || q.placed.length !== q.words.length) return;
+  const given = q.placed.map(i => q.words[i]).join(" ");
+  S.round.res[S.round.i] = { ok: q.alts.includes(norm(given)), given: given + q.punct };
+  render();
+}
+function next() {
+  const r = S.round; if (!answered()) return;
+  r.i++;
+  if (r.i >= r.items.length) S.view = r.mode === "point" ? "speak" : "results";
+  render(true);
+}
+function rateSpeak(v) { S.round.speak = v; S.view = "results"; render(true); }
+
+/* ---------- render: home ---------- */
+function homeHTML() {
+  const next = L.next ? L.next : null;
+  return `
+  <section class="shell hero">
+    <div class="eyebrow">CEFR ${esc(L.code)} · ${esc(L.name)}</div>
+    <h1>${esc(L.code)} Grammar Quick Checks</h1>
+    <p>Short, reusable checks for every point on the LLI ${esc(L.code)} Grammar Mastery Checklist. Project them in class or use them one-to-one. Each round draws new questions, so you can run a point again and again.</p>
+    <div class="stats"><span><b>${P.length}</b> grammar points</span><span><b>${L.units.length}</b> units</span><span><b>${TOTALQ}</b> questions in the bank</span><span><b>6</b> questions + a speaking task per check</span></div>
+  </section>
+  <section class="shell modes" aria-label="Ways to check">
+    <button class="mode primary" data-act="diag">
+      <h3>Level diagnostic</h3>
+      <p>One question for each of the ${P.length} points. Shows which sessions to check next. About 15 minutes.</p>
+      <span class="go">Start diagnostic →</span>
+    </button>
+    <div class="mode">
+      <h3>Point check</h3>
+      <p>Six questions on one grammar point, then a speaking task. Suggests a checklist stage at the end. About 10 minutes.</p>
+      <span class="go">Choose a point below ↓</span>
+    </div>
+    <div class="mode">
+      <h3>Unit review</h3>
+      <p>Ten mixed questions across one unit. Good for revision lessons and before moving on.</p>
+      <span class="go">Use “Unit review” on any unit ↓</span>
+    </div>
+  </section>
+  <section class="shell">
+    <details class="guide">
+      <summary>Teacher guide: how to run a quick check</summary>
+      <div class="body">
+        <ol class="steps">
+          <li><span>Choose the point you have just taught, or one marked <b>Introduced</b> or <b>Practising</b> on the student's checklist.</span></li>
+          <li><span>Project the page (Full screen helps) or sit beside the student. Read each question aloud.</span></li>
+          <li><span>Students answer aloud, on mini whiteboards or on paper. Then tap the answer the student — or most of the class — gave. Keys 1, 2, 3 choose an option; Enter moves on.</span></li>
+          <li><span>Read the short explanation together after each answer. If several students get it wrong, open <b>Teacher notes</b> for the rule and a quick-fix activity.</span></li>
+          <li><span>Finish with the speaking task. Let the student answer in their own words, listen for the target grammar, then rate what you heard.</span></li>
+          <li><span>Use the suggested stage to update the Grammar Mastery Checklist. Press <b>New round</b> for a fresh set of questions any time.</span></li>
+        </ol>
+        <div class="stage-key">
+          <div><b>Introduced</b>Taught and understood with support.</div>
+          <div><b>Practising</b>Used in guided tasks; errors still happen.</div>
+          <div><b>Mastered</b>Used independently in real speaking or writing, about 80%+ accurate.</div>
+        </div>
+        <p class="note">A quick check shows control in practice questions. Before ticking Mastered, also look for correct use in the student's own speaking or writing on another day.</p>
+      </div>
+    </details>
+  </section>
+  ${L.units.map((u, ui) => `
+  <section class="shell unit">
+    <div class="unit-head">
+      <div><div class="u">Unit ${ui + 1}</div><h2>${esc(u.n)}</h2></div>
+      <span class="s">Sessions ${u.start === u.end ? u.start : u.start + "–" + u.end}</span>
+      <div class="grow"></div>
+      <button class="unit-btn" data-act="unit" data-v="${ui}">Unit review</button>
+    </div>
+    <div class="points">
+      ${u.p.map(p => `<button class="pt" data-act="point" data-v="${p.no}"><span class="n">${pad(p.no)}</span><span><span class="t">${esc(p.t)}</span><span class="c">${esc(p.c)}</span></span><span class="arrow" aria-hidden="true">›</span></button>`).join("")}
+    </div>
+  </section>`).join("")}
+  <footer class="shell"><span>LLI · Lexilink Ideation</span><span>${esc(L.code)} Grammar Quick Checks</span>${L.homeUrl ? `<a href="${esc(L.homeUrl)}">All levels</a>` : ""}${L.otherUrl ? `<a href="${esc(L.otherUrl)}"${L.newTab ? ' target="_blank" rel="noopener"' : ""}>${esc(L.otherLabel)} →</a>` : ""}</footer>`;
+}
+
+/* ---------- render: question ---------- */
+function progressHTML() {
+  const r = S.round;
+  return `<div class="progress" aria-hidden="true">${r.items.map((_, i) => {
+    const x = r.res[i]; return `<span class="${x ? (x.ok ? "ok" : "no") : (i === r.i && S.view === "q" ? "cur" : "")}"></span>`; }).join("")}${r.mode === "point" ? `<span class="sp ${S.view === "speak" ? "cur" : (r.speak ? "ok" : "")}"></span>` : ""}</div>`;
+}
+function crumbsHTML() {
+  const r = S.round;
+  let title;
+  if (r.mode === "point") title = `<small>Session ${pad(r.point.no)}</small>${esc(r.point.t)}`;
+  else if (r.mode === "unit") title = `<small>Unit ${r.ui + 1} review</small>${esc(r.unit.n)}`;
+  else title = `<small>${esc(L.code)} diagnostic</small>One question per grammar point`;
+  const notesBtn = r.mode === "point" && S.view !== "results" ? `<button class="notes-btn" data-act="notes" aria-expanded="${S.notes}">Teacher notes</button>` : "";
+  return `<div class="crumbs"><button class="back" data-act="home">← All points</button><div class="crumb-title">${title}</div><div class="grow"></div>${notesBtn}</div>`;
+}
+function notesHTML() {
+  const p = S.round.point;
+  return `<dl class="notes">
+    <dt>Rule</dt><dd>${esc(p.r)}</dd>
+    ${p.ex ? `<dt>Example</dt><dd><i>${esc(p.ex)}</i></dd>` : ""}
+    ${p.w ? `<dt>Listen for</dt><dd>${esc(p.w)}</dd>` : ""}
+    <dt>Quick fix</dt><dd>${esc(p.tip)}</dd>
+  </dl>`;
+}
+function questionHTML() {
+  const r = S.round, q = cur(), res = r.res[r.i], done = res !== undefined;
+  let body = "";
+  if (q.t === "g") {
+    const gapWord = done ? (res.ok ? q.answer : res.given) : "";
+    const gapShow = gapWord === NOWORD ? "—" : gapWord;
+    const gap = `<span class="gap ${done ? (res.ok ? "ok" : "no") : ""}">${done ? esc(gapShow) : "&nbsp;"}</span>`;
+    body = `<p class="qtext">${esc(q.text).replace("___", gap)}</p>` + optsHTML(q, res, false);
+  } else if (q.t === "c") {
+    body = optsHTML(q, res, true);
+  } else if (q.t === "e") {
+    body = `<div class="words">${q.toks.map((t, k) => {
+      let cls = ""; if (done) { if (t.bad) cls = "bad"; else if (res.pick === k) cls = "picked"; }
+      return `<button class="word ${cls}" data-act="word" data-v="${k}" ${done ? "disabled" : ""}>${esc(t.w)}</button>`; }).join("")}</div>`;
+  } else if (q.t === "o") {
+    const placedSet = new Set(q.placed);
+    body = `<div class="line ${done ? (res.ok ? "done-ok" : "done-no") : ""}" aria-label="Your sentence">
+        ${q.placed.length ? q.placed.map((k, pos) => `<button class="tile" data-act="unplace" data-v="${pos}" ${done ? "disabled" : ""}>${esc(q.words[k])}</button>`).join("") : `<span class="placeholder">Tap the words below in the right order.</span>`}
+        ${q.placed.length ? `<span class="punct">${esc(q.punct)}</span>` : ""}
+      </div>
+      ${done ? "" : `<div class="bank">${q.bank.map(k => `<button class="tile ${placedSet.has(k) ? "used" : ""}" data-act="place" data-v="${k}" ${placedSet.has(k) ? 'tabindex="-1" aria-hidden="true"' : ""}>${esc(q.words[k])}</button>`).join("")}</div>
+      <div class="order-tools"><button class="btn" data-act="checkorder" ${q.placed.length === q.words.length ? "" : "disabled"}>Check<span class="kbd">Enter</span></button><button class="btn ghost" data-act="clear">Clear</button></div>`}`;
+  }
+  let fb = "";
+  if (done) {
+    const why = q.why || q.point.r;
+    const from = r.mode !== "point" ? `<p class="from">Session ${pad(q.point.no)} · ${esc(q.point.t)}</p>` : "";
+    fb = `<div class="fb ${res.ok ? "ok" : "no"}" role="status">
+      <p class="v">${res.ok ? "Correct." : "Not quite."}</p>
+      <p class="ans">${esc(q.full)}</p>
+      <p class="why">${esc(why)}</p>${from}
+    </div>
+    <div class="next-row"><button class="btn" data-act="next" id="nextBtn">${r.i + 1 >= r.items.length ? (r.mode === "point" ? "Speaking task" : "See results") : "Next question"}<span class="kbd">Enter</span></button></div>`;
+  }
+  return `<div class="card">
+    <div class="qhead"><span class="qtype">${TYPE_LABEL[q.t]}</span><span class="qnum">Question ${r.i + 1} of ${r.items.length}</span></div>
+    ${body}${fb}
+  </div>`;
+}
+function optsHTML(q, res, sent) {
+  const done = res !== undefined;
+  return `<div class="opts ${sent ? "sent" : ""}">${q.opts.map((o, k) => {
+    let cls = ""; if (done) { if (o === q.answer) cls = "right"; else if (o === res.given) cls = "wrong"; }
+    return `<button class="opt ${cls}" data-act="opt" data-v="${k}" ${done ? "disabled" : ""}><span class="k">${k + 1}</span><span class="lbl">${esc(o)}</span></button>`; }).join("")}</div>`;
+}
+function speakHTML() {
+  const r = S.round, p = r.point, [prompt, model] = r.sprompt;
+  return `<div class="card speak">
+    <div class="qhead"><span class="qtype">Speaking task · free use</span><span class="qnum">Last step</span></div>
+    <p class="prompt">${esc(prompt)}</p>
+    <p class="listen">Let the student answer in their own words. <b>Listen for:</b> ${esc(p.w || p.r)}</p>
+    ${r.showModel ? `<div class="model"><b>Model answer</b><p>${esc(model)}</p></div>` : `<div><button class="btn ghost" data-act="model">Show model answer</button></div>`}
+    <div class="section-label">How did the student use ${esc(p.t.toLowerCase())}?</div>
+    <div class="rate">
+      <button class="yes" data-act="rate" data-v="yes"><b>Used it correctly</b><span>Accurate, without help</span></button>
+      <button class="partly" data-act="rate" data-v="partly"><b>Partly</b><span>Some errors or needed prompting</span></button>
+      <button class="no" data-act="rate" data-v="no"><b>Not yet</b><span>Avoided it or mostly wrong</span></button>
+    </div>
+    <div class="next-row"><button class="btn ghost" data-act="rate" data-v="skip">Skip speaking task</button></div>
+  </div>`;
+}
+
+/* ---------- render: results ---------- */
+function suggestion(pct, sp) {
+  if (pct >= 0.8 && sp === "yes") return { stage: 2, head: "Ready to confirm Mastered",
+    text: "Accurate in this check and correct in free speaking. Tick <b>Mastered</b> once you also see correct use in the student's own speaking or writing on another day." };
+  if (pct >= 0.8) return { stage: 1, head: "Practising",
+    text: sp === "skip" || !sp ? "Accurate in the practice questions. Run the speaking task next time to check free use before Mastered."
+      : "Accurate in the practice questions, but not yet secure in free speaking. Give more speaking and writing practice, then check again." };
+  if (pct >= 0.5) return { stage: 1, head: "Practising",
+    text: "Some errors. Open <b>Teacher notes</b>, go over the rule, do the quick-fix activity, then run a new round." };
+  return { stage: 0, head: "Introduced — reteach",
+    text: "Most answers were wrong. Reteach this point with the rule and the quick-fix activity in <b>Teacher notes</b> before practising again." };
+}
+function reviewList(r) {
+  return `<ul class="review">${r.items.map((q, i) => { const x = r.res[i];
+    return `<li><span class="mk ${x.ok ? "ok" : "no"}">${x.ok ? "✓" : "✗"}</span><div><div>${esc(q.full)}</div>${x.ok ? "" : `<div class="gv">${q.t === "e" ? "Tapped" : "Answered"}: ${esc(x.given)}</div>`}${r.mode !== "point" ? `<div class="pp">Session ${pad(q.point.no)} · ${esc(q.point.t)}</div>` : ""}</div></li>`; }).join("")}</ul>`;
+}
+function resultsHTML() {
+  const r = S.round, n = r.items.length, ok = r.res.filter(x => x.ok).length, pct = ok / n;
+  if (r.mode === "point") {
+    const sg = suggestion(pct, r.speak);
+    const spText = { yes: "Used it correctly", partly: "Partly", no: "Not yet", skip: "Skipped" }[r.speak] || "Skipped";
+    const nextP = r.point.no < P.length ? r.point.no + 1 : null;
+    return `<div class="card">
+      <div class="score"><span class="big">${ok}<small> / ${n}</small></span><span class="lbl">questions correct · Speaking: <b>${spText}</b></span></div>
+      <div class="section-label">Suggested checklist stage</div>
+      <div class="stagebar">${["Introduced", "Practising", "Mastered"].map((s, i) => `<div class="${i === sg.stage ? "on" : ""}">${s}<small>${["Taught, needs support", "Guided use, some errors", "Independent, 80%+"][i]}</small></div>`).join("")}</div>
+      <p class="advice"><b>${sg.head}.</b> ${sg.text}</p>
+      <div class="next-row" style="justify-content:flex-start">
+        <button class="btn" data-act="again">New round</button>
+        ${nextP ? `<button class="btn ghost" data-act="point" data-v="${nextP}">Next point: ${pad(nextP)} ${esc(P[nextP - 1].t)} →</button>` : ""}
+        <button class="btn ghost" data-act="home">All points</button>
+      </div>
+      <div class="section-label">Answers</div>
+      ${reviewList(r)}
+    </div>`;
+  }
+  // unit review & diagnostic
+  const byPoint = new Map();
+  r.items.forEach((q, i) => { const e = byPoint.get(q.point.no) || { p: q.point, ok: 0, n: 0 }; e.n++; if (r.res[i].ok) e.ok++; byPoint.set(q.point.no, e); });
+  const entries = [...byPoint.values()].sort((a, b) => a.p.no - b.p.no);
+  const missed = entries.filter(e => e.ok < e.n), got = entries.filter(e => e.ok === e.n);
+  const isDiag = r.mode === "diag";
+  return `<div class="card">
+    <div class="score"><span class="big">${ok}<small> / ${n}</small></span><span class="lbl">${isDiag ? `grammar points answered correctly` : `questions correct across ${entries.length} point${entries.length > 1 ? "s" : ""}`}</span></div>
+    ${missed.length ? `<div class="section-label">Run a point check on these</div>
+      <div class="miss">${missed.map(e => `<button data-act="point" data-v="${e.p.no}"><span class="n">${pad(e.p.no)}</span><span>${esc(e.p.t)}${e.n > 1 ? ` <span class="gv">(${e.ok} of ${e.n} correct)</span>` : ""}</span><span class="go2">Point check →</span></button>`).join("")}</div>`
+      : `<p class="advice"><b>No errors.</b> ${isDiag ? "Use point checks with speaking tasks to confirm Mastered for individual points." : "Run point checks with the speaking task to confirm free use."}</p>`}
+    ${got.length ? `<div class="section-label">Correct this time</div><div class="chips">${got.map(e => `<span>${pad(e.p.no)} ${esc(e.p.t)}</span>`).join("")}</div>` : ""}
+    <p class="caution">${isDiag ? "One question per point is a screening, not a final judgement. A correct answer can be a lucky guess, and one mistake can be a slip. Confirm with point checks." : "Use this to decide which points need another point check before you move on."}</p>
+    <div class="next-row" style="justify-content:flex-start">
+      <button class="btn" data-act="again">${isDiag ? "New diagnostic" : "New round"}</button>
+      <button class="btn ghost" data-act="home">All points</button>
+    </div>
+    <div class="section-label">Answers</div>
+    ${reviewList(r)}
+  </div>`;
+}
+
+/* ---------- main render ---------- */
+const app = document.getElementById("app");
+function render(scrollTop) {
+  if (S.view === "home") { app.innerHTML = homeHTML(); }
+  else {
+    const top = crumbsHTML() + progressHTML() + (S.round.mode === "point" && S.notes && S.view !== "results" ? notesHTML() : "");
+    const main = S.view === "q" ? questionHTML() : S.view === "speak" ? speakHTML() : resultsHTML();
+    app.innerHTML = `<section class="shell check">${top}${main}</section>`;
+  }
+  if (scrollTop) window.scrollTo(0, 0);
+  const nb = document.getElementById("nextBtn"); if (nb) nb.focus({ preventScroll: true });
+}
+
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-act]"); if (!b) return;
+  const v = b.dataset.v, act = b.dataset.act;
+  switch (act) {
+    case "home": S.view = "home"; S.round = null; render(true); break;
+    case "point": startPoint(+v); break;
+    case "unit": startUnit(+v); break;
+    case "diag": startDiag(); break;
+    case "again": again(); break;
+    case "opt": choose(+v); break;
+    case "word": tapWord(+v); break;
+    case "place": place(+v); break;
+    case "unplace": unplace(+v); break;
+    case "clear": clearOrder(); break;
+    case "checkorder": checkOrder(); break;
+    case "next": next(); break;
+    case "notes": S.notes = !S.notes; render(); break;
+    case "model": S.round.showModel = true; render(); break;
+    case "rate": rateSpeak(v); break;
+    case "size": size = { m: "l", l: "xl", xl: "m" }[size]; try { localStorage.setItem("lli-qsize", size); } catch (err) {} applySize(); break;
+    case "full": {
+      const d = document;
+      try { if (d.fullscreenElement) d.exitFullscreen?.(); else d.documentElement.requestFullscreen?.()?.catch?.(() => {}); } catch (err) {}
+      break; }
+  }
+});
+document.addEventListener("keydown", e => {
+  if (S.view !== "q" || e.altKey || e.ctrlKey || e.metaKey) return;
+  const q = cur();
+  if (/^[1-9]$/.test(e.key) && q.opts && !answered()) { e.preventDefault(); choose(+e.key - 1); }
+  else if (e.key === "Enter") {
+    if (e.target.closest && e.target.closest("button")) return; // native button click handles it
+    if (answered()) { e.preventDefault(); next(); }
+    else if (q.t === "o" && q.placed.length === q.words.length) { e.preventDefault(); checkOrder(); }
+  }
+});
+
+document.getElementById("lvlChip").textContent = L.code + " Quick Checks";
+applySize();
+render();
+</script>
+</body>
+</html>
